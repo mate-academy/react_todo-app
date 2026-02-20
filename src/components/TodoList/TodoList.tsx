@@ -21,6 +21,30 @@ export const TodoList: React.FC = () => {
     return true;
   });
 
+  const onDouble = (todoTitle: string, todoId: number) => {
+    setEditValue(todoTitle);
+    dispatch({ type: 'START_EDIT', payload: todoId });
+  };
+
+  const handleBlure = (todoId: number) => {
+    const trimmed = editValue.trim();
+
+    if (trimmed === '') {
+      dispatch({ type: 'DELETE', payload: todoId });
+    } else {
+      dispatch({
+        type: 'FINISH_EDIT',
+        payload: { id: todoId, title: editValue },
+      });
+    }
+  };
+
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Escape') {
+      dispatch({ type: 'CANCEL_EDIT' });
+    }
+  };
+
   useEffect(() => {
     if (editingId !== null) {
       inputRef.current?.focus();
@@ -69,25 +93,10 @@ export const TodoList: React.FC = () => {
                     type="text"
                     className="todo__title-field"
                     placeholder="Empty todo will be deleted"
-                    onBlur={() => {
-                      const trimmed = editValue.trim();
-
-                      if (trimmed === '') {
-                        dispatch({ type: 'DELETE', payload: todo.id });
-                      } else {
-                        dispatch({
-                          type: 'FINISH_EDIT',
-                          payload: { id: todo.id, title: editValue },
-                        });
-                      }
-                    }}
+                    onBlur={() => handleBlure(todo.id)}
                     value={editValue}
                     ref={inputRef}
-                    onKeyDown={e => {
-                      if (e.key === 'Escape') {
-                        dispatch({ type: 'CANCEL_EDIT' });
-                      }
-                    }}
+                    onKeyDown={e => handleKeyDown(e)}
                     onChange={e => setEditValue(e.target.value)}
                   />
                 </form>
@@ -97,10 +106,7 @@ export const TodoList: React.FC = () => {
                 <span
                   data-cy="TodoTitle"
                   className="todo__title"
-                  onDoubleClick={() => {
-                    setEditValue(todo.title);
-                    dispatch({ type: 'START_EDIT', payload: todo.id });
-                  }}
+                  onDoubleClick={() => onDouble(todo.title, todo.id)}
                 >
                   {todo.title}
                 </span>
