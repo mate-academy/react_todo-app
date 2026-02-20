@@ -1,8 +1,14 @@
+import { useContext } from 'react';
+import { TodoContext } from '../context/TodoContext';
+
 export const Footer = () => {
+  const { todos } = useContext(TodoContext);
+  const notCompletedTodosCount = todos.filter(todo => !todo.completed).length;
+
   return (
     <footer className="todoapp__footer" data-cy="Footer">
       <span className="todo-count" data-cy="TodosCounter">
-        3 items left
+        {notCompletedTodosCount} items left
       </span>
 
       {/* Active link should have the 'selected' class */}
