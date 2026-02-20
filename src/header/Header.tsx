@@ -1,4 +1,7 @@
+import classNames from 'classnames';
 import { useContext } from 'react';
+import { useEffect } from 'react';
+import { useRef } from 'react';
 import { useState } from 'react';
 import { TodoContext } from '../store/TodoContext';
 import { addTodoAction, completeAllAction } from '../store/TodoReducer';
@@ -6,35 +9,45 @@ import { addTodoAction, completeAllAction } from '../store/TodoReducer';
 export const Header = () => {
   const { todos, dispatch } = useContext(TodoContext);
   const [newTodo, setNewTodo] = useState('');
-  const [todosIsDone, setTodosIsDone] = useState(false);
+  const inputRef = useRef<HTMLInputElement>(null);
+  const todosAreDone = todos.length > 0 && todos.every(t => t.completed);
 
   const addTodo = (event: React.SyntheticEvent<HTMLFormElement>) => {
     event.preventDefault();
-    dispatch(addTodoAction(newTodo));
-    setNewTodo('');
+
+    if (newTodo.trim().length > 0) {
+      dispatch(addTodoAction(newTodo));
+      setNewTodo('');
+    }
   };
 
   const completeAll = () => {
-    const newValue = !todosIsDone;
+    const newValue = !todosAreDone;
 
-    setTodosIsDone(newValue);
     dispatch(completeAllAction(newValue));
   };
+
+  useEffect(() => {
+    if (inputRef.current) {
+      inputRef.current.focus();
+    }
+  }, [todos]);
 
   return (
     <header className="todoapp__header">
       {todos.length > 0 && (
         <button
           type="button"
-          className={
-            todosIsDone ? 'todoapp__toggle-all active' : 'todoapp__toggle-all'
-          }
+          className={classNames('todoapp__toggle-all', {
+            active: todosAreDone,
+          })}
           data-cy="ToggleAllButton"
           onClick={completeAll}
         />
       )}
       <form onSubmit={addTodo}>
         <input
+          ref={inputRef}
           value={newTodo}
           onChange={event => setNewTodo(event.target.value)}
           data-cy="NewTodoField"

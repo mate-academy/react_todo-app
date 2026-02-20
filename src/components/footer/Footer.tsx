@@ -1,62 +1,52 @@
-import { useContext, useEffect, useState } from 'react';
+import classNames from 'classnames';
+import { useContext } from 'react';
 import { SortContext } from '../../store/SortContext';
 import { TodoContext } from '../../store/TodoContext';
 import { deleteCompletedAction } from '../../store/TodoReducer';
 
+export const filters = ['all', 'active', 'completed'] as const;
+
+export type Filter = (typeof filters)[number];
+
 export const Footer = () => {
   const { todos, dispatch } = useContext(TodoContext);
   const { sortBy, sortDispatch } = useContext(SortContext);
-  const [count, setCount] = useState(0);
 
-  useEffect(() => {
-    setCount(todos.filter(item => !item.completed).length);
-  }, [todos]);
+  const activeCount = todos.filter(todo => !todo.completed).length;
+  const completedCount = todos.filter(todo => todo.completed).length;
 
   return (
     <footer className="todoapp__footer" data-cy="Footer">
       <span className="todo-count" data-cy="TodosCounter">
-        {count} items left
+        {activeCount} item{activeCount !== 1 ? 's' : ''} left
       </span>
 
       <nav className="filter" data-cy="Filter">
-        <a
-          href="#/"
-          className={
-            sortBy === 'all' ? 'filter__link selected' : 'filter__link'
-          }
-          data-cy="FilterLinkAll"
-          onClick={() => sortDispatch('all')}
-        >
-          All
-        </a>
-
-        <a
-          href="#/active"
-          className={
-            sortBy === 'active' ? 'filter__link selected' : 'filter__link'
-          }
-          data-cy="FilterLinkActive"
-          onClick={() => sortDispatch('active')}
-        >
-          Active
-        </a>
-
-        <a
-          href="#/completed"
-          className={
-            sortBy === 'completed' ? 'filter__link selected' : 'filter__link'
-          }
-          data-cy="FilterLinkCompleted"
-          onClick={() => sortDispatch('completed')}
-        >
-          Completed
-        </a>
+        {filters.map(item => {
+          return (
+            <a
+              key={item}
+              href={`#/${item === 'all' ? '' : item}`}
+              className={classNames('filter__link', {
+                selected: sortBy === item,
+              })}
+              data-cy="FilterLinkAll"
+              onClick={e => {
+                e.preventDefault();
+                sortDispatch(item as Filter);
+              }}
+            >
+              {item.charAt(0).toUpperCase() + item.slice(1)}
+            </a>
+          );
+        })}
       </nav>
 
       <button
         type="button"
         className="todoapp__clear-completed"
         data-cy="ClearCompletedButton"
+        disabled={completedCount === 0}
         onClick={() => dispatch(deleteCompletedAction())}
       >
         Clear completed

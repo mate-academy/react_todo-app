@@ -1,3 +1,4 @@
+import classNames from 'classnames';
 import { useRef } from 'react';
 import { useState } from 'react';
 import { useEffect } from 'react';
@@ -20,7 +21,7 @@ export const TodoItem = ({ todo }: Props) => {
   const [isEditing, setIsEditing] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
 
-  const canselEditings = (event: React.KeyboardEvent<HTMLInputElement>) => {
+  const cancelEditings = (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (event.key === 'Escape') {
       setTitle(todo.title);
       setIsEditing(false);
@@ -28,7 +29,7 @@ export const TodoItem = ({ todo }: Props) => {
   };
 
   const editTodo = () => {
-    if (title === '') {
+    if (title.trim() === '') {
       dispatch(deleteTodoAction(todo.id));
     } else {
       dispatch(renameTodoAction(todo.id, title));
@@ -52,7 +53,7 @@ export const TodoItem = ({ todo }: Props) => {
   return (
     <div
       data-cy="Todo"
-      className={todo.completed ? 'todo completed' : 'todo'}
+      className={classNames('todo', { completed: todo.completed })}
       key={todo.id}
     >
       {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
@@ -95,7 +96,7 @@ export const TodoItem = ({ todo }: Props) => {
             placeholder="Empty todo will be deleted"
             value={title}
             onChange={event => setTitle(event.target.value)}
-            onKeyUp={event => canselEditings(event)}
+            onKeyUp={event => cancelEditings(event)}
             onBlur={() => editTodo()}
           />
         </form>
