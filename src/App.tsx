@@ -1,12 +1,13 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
-import React, { useState } from 'react';
+import React, { useContext } from 'react';
 import { Header } from './components/Header';
 import { TodoList } from './components/TodoList';
 import { Footer } from './components/Footer';
-import { Todo } from './types/Todo';
+import { TodoContext } from './context/TodoContext';
 
 export const App: React.FC = () => {
-  const [todos] = useState<Todo[]>([]);
+  const { todos } = useContext(TodoContext);
+  const hasTodos = todos.length > 0;
 
   return (
     <div className="todoapp">
@@ -14,9 +15,9 @@ export const App: React.FC = () => {
 
       <div className="todoapp__content">
         <Header />
-        <TodoList />
+        {hasTodos && <TodoList />}
         {/* Hide the footer if there are no todos */}
-        {todos.length > 0 && <Footer />}
+        {hasTodos && <Footer />}
       </div>
     </div>
   );
