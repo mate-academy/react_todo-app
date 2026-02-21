@@ -6,6 +6,7 @@ type TodoContextType = {
   todos: Todo[];
   setTodos: React.Dispatch<React.SetStateAction<Todo[]>>;
   removeTodo: (id: number) => void;
+  clearCompleted: () => void;
   filter: TodoFilter;
   setFilter: (filter: TodoFilter) => void;
 };
@@ -14,6 +15,7 @@ const defaultContextValue: TodoContextType = {
   todos: [],
   setTodos: () => {},
   removeTodo: () => {},
+  clearCompleted: () => {},
   filter: 'all',
   setFilter: () => {},
 };
@@ -40,9 +42,13 @@ export const TodoProvider = ({ children }: { children: ReactNode }) => {
     setTodos(prevTodos => prevTodos.filter(todo => todo.id !== id));
   };
 
+  const clearCompleted = () => {
+    setTodos(prevTodos => prevTodos.filter(todo => !todo.completed));
+  };
+
   return (
     <TodoContext.Provider
-      value={{ todos, setTodos, filter, setFilter, removeTodo }}
+      value={{ todos, setTodos, filter, setFilter, removeTodo, clearCompleted }}
     >
       {children}
     </TodoContext.Provider>

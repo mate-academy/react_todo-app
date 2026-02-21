@@ -3,7 +3,7 @@ import { TodoContext } from '../context/TodoContext';
 import classNames from 'classnames';
 
 export const Footer = () => {
-  const { todos, filter, setFilter } = useContext(TodoContext);
+  const { todos, filter, setFilter, clearCompleted } = useContext(TodoContext);
   const notCompletedTodosCount = todos.filter(todo => !todo.completed).length;
 
   return (
@@ -60,6 +60,8 @@ export const Footer = () => {
         type="button"
         className="todoapp__clear-completed"
         data-cy="ClearCompletedButton"
+        onClick={clearCompleted}
+        disabled={notCompletedTodosCount === todos.length}
       >
         Clear completed
       </button>
