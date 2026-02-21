@@ -1,8 +1,9 @@
 import { useContext } from 'react';
 import { TodoContext } from '../context/TodoContext';
+import classNames from 'classnames';
 
 export const Footer = () => {
-  const { todos } = useContext(TodoContext);
+  const { todos, filter, setFilter } = useContext(TodoContext);
   const notCompletedTodosCount = todos.filter(todo => !todo.completed).length;
 
   return (
@@ -13,18 +14,42 @@ export const Footer = () => {
 
       {/* Active link should have the 'selected' class */}
       <nav className="filter" data-cy="Filter">
-        <a href="#/" className="filter__link selected" data-cy="FilterLinkAll">
+        <a
+          href="#/"
+          className={classNames('filter__link', { selected: filter === 'all' })}
+          data-cy="FilterLinkAll"
+          onClick={e => {
+            e.preventDefault();
+            setFilter('all');
+          }}
+        >
           All
         </a>
 
-        <a href="#/active" className="filter__link" data-cy="FilterLinkActive">
+        <a
+          href="#/active"
+          className={classNames('filter__link', {
+            selected: filter === 'active',
+          })}
+          data-cy="FilterLinkActive"
+          onClick={e => {
+            e.preventDefault();
+            setFilter('active');
+          }}
+        >
           Active
         </a>
 
         <a
           href="#/completed"
-          className="filter__link"
+          className={classNames('filter__link', {
+            selected: filter === 'completed',
+          })}
           data-cy="FilterLinkCompleted"
+          onClick={e => {
+            e.preventDefault();
+            setFilter('completed');
+          }}
         >
           Completed
         </a>
