@@ -55,5 +55,5 @@ export interface Props {
 
 export const TodoContext = createContext<Props>({
   todos: [],
-  dispatch: () => {},
+  dispatch: (() => { }) as React.Dispatch<Action>,
 });

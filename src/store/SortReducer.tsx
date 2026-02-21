@@ -1,6 +1,7 @@
-type State = string;
+import { Filter } from './filters'
 
-type Action = 'all' | 'completed' | 'active';
+type State = Filter;
+type Action = Filter;
 
 export const SortReducer = (state: State, action: Action): State => {
   switch (action) {

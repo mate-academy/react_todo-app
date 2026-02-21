@@ -1,5 +1,6 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
 import React from 'react';
+import { useEffect } from 'react';
 import { useReducer } from 'react';
 import { Footer } from './components/footer/Footer';
 import { TodoList } from './components/TodoList/TodoList';
@@ -10,23 +11,21 @@ import { TodoContext } from './store/TodoContext';
 import { TodoReducer } from './store/TodoReducer';
 
 export const App: React.FC = () => {
-  const [todos, dispatch] = useReducer(TodoReducer, [
-    {
-      id: 1,
-      title: 'Not Completed Todo',
-      completed: true,
-    },
-    {
-      id: 2,
-      title: 'Todo',
-      completed: false,
-    },
-    {
-      id: 3,
-      title: 'Completed Todo',
-      completed: false,
-    },
-  ]);
+  const initTodos = () => {
+    const saved = localStorage.getItem('todos');
+    return saved ? JSON.parse(saved) : [];
+  };
+
+  const [todos, dispatch] = useReducer(
+    TodoReducer,
+    [],
+    initTodos
+  );
+
+  useEffect(() => {
+    localStorage.setItem('todos', JSON.stringify(todos));
+  }, [todos]);
+
   const [sortBy, sortDispatch] = useReducer(SortReducer, 'all');
 
   return (

@@ -1,13 +1,16 @@
 import { createContext } from 'react';
-
-type Action = 'all' | 'completed' | 'active';
+import { Filters, Filter } from './filters';
 
 export interface Props {
-  sortBy: string;
-  sortDispatch: React.Dispatch<Action>;
+  sortBy: Filter;
+  sortDispatch: React.Dispatch<Filter>;
 }
 
+const noop: React.Dispatch<Filter> = () => {
+  throw new Error('sortDispatch must be used within SortContext.Provider');
+};
+
 export const SortContext = createContext<Props>({
-  sortBy: '',
-  sortDispatch: () => {},
+  sortBy: Filters[0],
+  sortDispatch: noop,
 });

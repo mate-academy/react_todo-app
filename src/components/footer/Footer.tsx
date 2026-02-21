@@ -1,12 +1,9 @@
 import classNames from 'classnames';
 import { useContext } from 'react';
+import { Filters, Filter } from '../../store/filters';
 import { SortContext } from '../../store/SortContext';
 import { TodoContext } from '../../store/TodoContext';
 import { deleteCompletedAction } from '../../store/TodoReducer';
-
-export const filters = ['all', 'active', 'completed'] as const;
-
-export type Filter = (typeof filters)[number];
 
 export const Footer = () => {
   const { todos, dispatch } = useContext(TodoContext);
@@ -22,7 +19,7 @@ export const Footer = () => {
       </span>
 
       <nav className="filter" data-cy="Filter">
-        {filters.map(item => {
+        {Filters.map(item => {
           return (
             <a
               key={item}

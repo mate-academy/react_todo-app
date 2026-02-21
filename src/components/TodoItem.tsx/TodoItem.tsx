@@ -21,6 +21,10 @@ export const TodoItem = ({ todo }: Props) => {
   const [isEditing, setIsEditing] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
 
+  useEffect(() => {
+    setTitle(todo.title);
+  }, [todo.title]);
+
   const cancelEditings = (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (event.key === 'Escape') {
       setTitle(todo.title);
@@ -29,10 +33,12 @@ export const TodoItem = ({ todo }: Props) => {
   };
 
   const editTodo = () => {
-    if (title.trim() === '') {
+    const trimmed = title.trim();
+
+    if (!trimmed) {
       dispatch(deleteTodoAction(todo.id));
     } else {
-      dispatch(renameTodoAction(todo.id, title));
+      dispatch(renameTodoAction(todo.id, trimmed));
     }
 
     setIsEditing(false);

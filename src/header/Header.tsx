@@ -16,22 +16,20 @@ export const Header = () => {
     event.preventDefault();
 
     if (newTodo.trim().length > 0) {
-      dispatch(addTodoAction(newTodo));
+      dispatch(addTodoAction(newTodo.trim()));
       setNewTodo('');
     }
   };
 
   const completeAll = () => {
-    const newValue = !todosAreDone;
-
-    dispatch(completeAllAction(newValue));
+    dispatch(completeAllAction(!todosAreDone));
   };
 
   useEffect(() => {
-    if (inputRef.current) {
+    if (inputRef.current && todos.length === 0) {
       inputRef.current.focus();
     }
-  }, [todos]);
+  }, [todos.length]);
 
   return (
     <header className="todoapp__header">
