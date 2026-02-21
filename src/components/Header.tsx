@@ -1,10 +1,12 @@
 import React, { useContext, useState } from 'react';
 import { TodoContext } from '../context/TodoContext';
 import { Todo } from '../types/Todo';
+import classNames from 'classnames';
 
 export const Header = () => {
   const [inputText, setInputText] = useState('');
-  const { setTodos } = useContext(TodoContext);
+  const { todos, setTodos, toggleAll } = useContext(TodoContext);
+  const allCompleted = todos.every(todo => todo.completed);
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -27,11 +29,16 @@ export const Header = () => {
   return (
     <header className="todoapp__header">
       {/* this button should have `active` class only if all todos are completed */}
-      <button
-        type="button"
-        className="todoapp__toggle-all active"
-        data-cy="ToggleAllButton"
-      />
+      {todos.length > 0 && (
+        <button
+          type="button"
+          className={classNames('todoapp__toggle-all', {
+            active: allCompleted,
+          })}
+          data-cy="ToggleAllButton"
+          onClick={toggleAll}
+        />
+      )}
 
       {/* Add a todo on form submit */}
       <form onSubmit={handleSubmit}>
