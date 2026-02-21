@@ -1,10 +1,17 @@
 import { Todo } from '../types/Todo';
+import { useContext } from 'react';
+import { TodoContext } from '../context/TodoContext';
 
 type TodoItemProps = {
   todo: Todo;
 };
 
 export const TodoItem = ({ todo }: TodoItemProps) => {
+  const { removeTodo } = useContext(TodoContext);
+  const handleRemoveButton = () => {
+    removeTodo(todo.id);
+  };
+
   return (
     <div data-cy="Todo" className="todo">
       {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
@@ -16,7 +23,12 @@ export const TodoItem = ({ todo }: TodoItemProps) => {
         {todo.title}
       </span>
 
-      <button type="button" className="todo__remove" data-cy="TodoDelete">
+      <button
+        type="button"
+        className="todo__remove"
+        data-cy="TodoDelete"
+        onClick={handleRemoveButton}
+      >
         ×
       </button>
     </div>

@@ -5,6 +5,7 @@ import { TodoFilter } from '../types/TodoFilter';
 type TodoContextType = {
   todos: Todo[];
   setTodos: React.Dispatch<React.SetStateAction<Todo[]>>;
+  removeTodo: (id: number) => void;
   filter: TodoFilter;
   setFilter: (filter: TodoFilter) => void;
 };
@@ -12,6 +13,7 @@ type TodoContextType = {
 const defaultContextValue: TodoContextType = {
   todos: [],
   setTodos: () => {},
+  removeTodo: () => {},
   filter: 'all',
   setFilter: () => {},
 };
@@ -34,8 +36,14 @@ export const TodoProvider = ({ children }: { children: ReactNode }) => {
     localStorage.setItem('todos', JSON.stringify(todos));
   }, [todos]);
 
+  const removeTodo = (id: number) => {
+    setTodos(prevTodos => prevTodos.filter(todo => todo.id !== id));
+  };
+
   return (
-    <TodoContext.Provider value={{ todos, setTodos, filter, setFilter }}>
+    <TodoContext.Provider
+      value={{ todos, setTodos, filter, setFilter, removeTodo }}
+    >
       {children}
     </TodoContext.Provider>
   );
