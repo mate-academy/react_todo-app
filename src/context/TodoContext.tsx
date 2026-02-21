@@ -9,6 +9,7 @@ type TodoContextType = {
   clearCompleted: () => void;
   filter: TodoFilter;
   setFilter: (filter: TodoFilter) => void;
+  toggleTodo: (id: number) => void;
 };
 
 const defaultContextValue: TodoContextType = {
@@ -18,6 +19,7 @@ const defaultContextValue: TodoContextType = {
   clearCompleted: () => {},
   filter: 'all',
   setFilter: () => {},
+  toggleTodo: () => {},
 };
 
 export const TodoContext = createContext<TodoContextType>(defaultContextValue);
@@ -46,9 +48,25 @@ export const TodoProvider = ({ children }: { children: ReactNode }) => {
     setTodos(prevTodos => prevTodos.filter(todo => !todo.completed));
   };
 
+  const toggleTodo = (id: number) => {
+    setTodos(prevTodos =>
+      prevTodos.map(todo =>
+        todo.id === id ? { ...todo, completed: !todo.completed } : todo,
+      ),
+    );
+  };
+
   return (
     <TodoContext.Provider
-      value={{ todos, setTodos, filter, setFilter, removeTodo, clearCompleted }}
+      value={{
+        todos,
+        setTodos,
+        filter,
+        setFilter,
+        removeTodo,
+        clearCompleted,
+        toggleTodo,
+      }}
     >
       {children}
     </TodoContext.Provider>
