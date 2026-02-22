@@ -12,14 +12,15 @@ export const Header = () => {
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    const trimmedInputText = inputText.trim();
 
-    if (!inputText) {
+    if (!trimmedInputText) {
       return;
     }
 
     const newTodo: Todo = {
       id: Date.now(),
-      title: inputText.trim(),
+      title: trimmedInputText,
       completed: false,
     };
 
