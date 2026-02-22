@@ -8,11 +8,13 @@ type TodoItemProps = {
 };
 
 export const TodoItem = ({ todo }: TodoItemProps) => {
-  const { removeTodo, toggleTodo, updateTodoTitle } = useContext(TodoContext);
+  const { removeTodo, toggleTodo, updateTodoTitle, focusInput } =
+    useContext(TodoContext);
   const [isEditing, setIsEditing] = useState(false);
   const [editedValue, setEditedValue] = useState(todo.title);
   const handleRemoveButton = () => {
     removeTodo(todo.id);
+    focusInput();
   };
 
   const handleSave = () => {

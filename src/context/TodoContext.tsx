@@ -1,4 +1,10 @@
-import React, { createContext, ReactNode, useEffect, useState } from 'react';
+import React, {
+  createContext,
+  ReactNode,
+  useEffect,
+  useRef,
+  useState,
+} from 'react';
 import { Todo } from '../types/Todo';
 import { TodoFilter } from '../types/TodoFilter';
 
@@ -12,6 +18,8 @@ type TodoContextType = {
   toggleTodo: (id: number) => void;
   toggleAll: () => void;
   updateTodoTitle: (id: number, title: string) => void;
+  inputRef: React.RefObject<HTMLInputElement>;
+  focusInput: () => void;
 };
 
 const defaultContextValue: TodoContextType = {
@@ -24,6 +32,8 @@ const defaultContextValue: TodoContextType = {
   toggleTodo: () => {},
   toggleAll: () => {},
   updateTodoTitle: () => {},
+  inputRef: { current: null },
+  focusInput: () => {},
 };
 
 export const TodoContext = createContext<TodoContextType>(defaultContextValue);
@@ -39,17 +49,22 @@ export const TodoProvider = ({ children }: { children: ReactNode }) => {
     }
   });
   const [filter, setFilter] = useState<TodoFilter>('all');
+  const inputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     localStorage.setItem('todos', JSON.stringify(todos));
   }, [todos]);
 
+  const focusInput = () => inputRef.current?.focus();
+
   const removeTodo = (id: number) => {
     setTodos(prevTodos => prevTodos.filter(todo => todo.id !== id));
+    focusInput();
   };
 
   const clearCompleted = () => {
     setTodos(prevTodos => prevTodos.filter(todo => !todo.completed));
+    focusInput();
   };
 
   const toggleTodo = (id: number) => {
@@ -70,9 +85,7 @@ export const TodoProvider = ({ children }: { children: ReactNode }) => {
 
   const updateTodoTitle = (id: number, title: string) => {
     setTodos(prevTodos =>
-      prevTodos.map(todo =>
-        todo.id === id ? { ...todo, title } : todo,
-      ),
+      prevTodos.map(todo => (todo.id === id ? { ...todo, title } : todo)),
     );
   };
 
@@ -88,6 +101,8 @@ export const TodoProvider = ({ children }: { children: ReactNode }) => {
         toggleTodo,
         toggleAll,
         updateTodoTitle,
+        inputRef,
+        focusInput,
       }}
     >
       {children}

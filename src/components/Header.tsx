@@ -5,7 +5,9 @@ import classNames from 'classnames';
 
 export const Header = () => {
   const [inputText, setInputText] = useState('');
-  const { todos, setTodos, toggleAll } = useContext(TodoContext);
+  const { todos, setTodos, toggleAll, inputRef, focusInput } =
+    useContext(TodoContext);
+
   const allCompleted = todos.every(todo => todo.completed);
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
@@ -24,6 +26,7 @@ export const Header = () => {
     setTodos(prevTodos => [...prevTodos, newTodo]);
 
     setInputText('');
+    focusInput();
   };
 
   return (
@@ -43,6 +46,7 @@ export const Header = () => {
       {/* Add a todo on form submit */}
       <form onSubmit={handleSubmit}>
         <input
+          ref={inputRef}
           data-cy="NewTodoField"
           type="text"
           className="todoapp__new-todo"
@@ -50,6 +54,13 @@ export const Header = () => {
           value={inputText}
           onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
             setInputText(e.target.value);
+          }}
+          autoFocus
+          onKeyUp={e => {
+            if (e.key === 'Escape') {
+              setInputText('');
+              focusInput();
+            }
           }}
         />
       </form>
