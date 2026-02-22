@@ -1,5 +1,5 @@
 import { Todo } from '../types/Todo';
-import { useContext } from 'react';
+import { useContext, useState } from 'react';
 import { TodoContext } from '../context/TodoContext';
 import classNames from 'classnames';
 
@@ -8,9 +8,23 @@ type TodoItemProps = {
 };
 
 export const TodoItem = ({ todo }: TodoItemProps) => {
-  const { removeTodo, toggleTodo } = useContext(TodoContext);
+  const { removeTodo, toggleTodo, updateTodoTitle } = useContext(TodoContext);
+  const [isEditing, setIsEditing] = useState(false);
+  const [editedValue, setEditedValue] = useState(todo.title);
   const handleRemoveButton = () => {
     removeTodo(todo.id);
+  };
+
+  const handleSave = () => {
+    const trimmedValue = editedValue.trim();
+
+    if (!trimmedValue) {
+      removeTodo(todo.id);
+    } else {
+      updateTodoTitle(todo.id, trimmedValue);
+    }
+
+    setIsEditing(false);
   };
 
   return (
@@ -29,18 +43,55 @@ export const TodoItem = ({ todo }: TodoItemProps) => {
         />
       </label>
 
-      <span data-cy="TodoTitle" className="todo__title">
-        {todo.title}
-      </span>
+      {!isEditing && (
+        <>
+          <span
+            data-cy="TodoTitle"
+            className="todo__title"
+            onDoubleClick={() => {
+              setIsEditing(true);
+              setEditedValue(todo.title);
+            }}
+          >
+            {todo.title}
+          </span>
 
-      <button
-        type="button"
-        className="todo__remove"
-        data-cy="TodoDelete"
-        onClick={handleRemoveButton}
-      >
-        ×
-      </button>
+          <button
+            type="button"
+            className="todo__remove"
+            data-cy="TodoDelete"
+            onClick={handleRemoveButton}
+          >
+            ×
+          </button>
+        </>
+      )}
+
+      {isEditing && (
+        <form
+          onSubmit={e => {
+            e.preventDefault();
+            handleSave();
+          }}
+        >
+          <input
+            data-cy="TodoTitleField"
+            type="text"
+            className="todo__title-field"
+            placeholder="Empty todo will be deleted"
+            autoFocus
+            value={editedValue}
+            onChange={e => setEditedValue(e.target.value)}
+            onBlur={handleSave}
+            onKeyUp={e => {
+              if (e.key === 'Escape') {
+                setIsEditing(false);
+                setEditedValue(todo.title);
+              }
+            }}
+          />
+        </form>
+      )}
     </div>
   );
 };
