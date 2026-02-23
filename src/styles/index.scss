@@ -1,3 +1,7 @@
+html {
+  background: #f5f5f5;
+}
+
 iframe {
   display: none;
 }
@@ -6,6 +10,7 @@ body {
   min-width: 230px;
   max-width: 550px;
   margin: 0 auto;
+  color: #000;
 }
 
 .notification {
@@ -21,5 +26,5 @@ body {
 }
 
 @import './todoapp';
-@import './todo-list';
-@import './filters';
+@import './todo';
+@import './filter';
