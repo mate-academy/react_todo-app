@@ -122,7 +122,7 @@ export const TodosProvider: React.FC<TodosProviderProps> = ({ children }) => {
     }
   }, [todos, mode]);
 
-  // Handle filter changes based on URL hash
+  // Handle filter changes based on URL has
   useEffect(() => {
     const handleHashChange = () => {
       const hash = window.location.hash.slice(2) || 'all';
