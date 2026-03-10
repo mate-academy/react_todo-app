@@ -1,13 +1,15 @@
 import React, { useContext } from 'react';
 import { TodoContext } from '../contexts/TodoContext';
+import { FilterType, Filter } from '../types/Filter';
+import classNames from 'classnames';
 
 interface Props {
-  filter: 'all' | 'active' | 'completed';
-  onFilterChange: (filter: 'all' | 'active' | 'completed') => void;
+  filter: FilterType;
+  onFilterChange: (filter: FilterType) => void;
 }
 
 export const TodoFooter: React.FC<Props> = ({ filter, onFilterChange }) => {
-  const { todos, clearCompleted } = useContext(TodoContext);
+  const { todos, clearCompleted, newTodoInputRef } = useContext(TodoContext);
 
   const activeCount = todos.filter(todo => !todo.completed).length;
   const hasCompleted = todos.some(todo => todo.completed);
@@ -22,11 +24,13 @@ export const TodoFooter: React.FC<Props> = ({ filter, onFilterChange }) => {
       <nav className="filter" data-cy="Filter">
         <a
           href="#/"
-          className={`filter__link ${filter === 'all' ? 'selected' : ''}`}
+          className={classNames('filter__link', {
+            selected: filter === Filter.ALL,
+          })}
           data-cy="FilterLinkAll"
           onClick={e => {
             e.preventDefault();
-            onFilterChange('all');
+            onFilterChange(Filter.ALL);
           }}
         >
           All
@@ -34,11 +38,13 @@ export const TodoFooter: React.FC<Props> = ({ filter, onFilterChange }) => {
 
         <a
           href="#/active"
-          className={`filter__link ${filter === 'active' ? 'selected' : ''}`}
+          className={classNames('filter__link', {
+            selected: filter === Filter.ACTIVE,
+          })}
           data-cy="FilterLinkActive"
           onClick={e => {
             e.preventDefault();
-            onFilterChange('active');
+            onFilterChange(Filter.ACTIVE);
           }}
         >
           Active
@@ -46,11 +52,13 @@ export const TodoFooter: React.FC<Props> = ({ filter, onFilterChange }) => {
 
         <a
           href="#/completed"
-          className={`filter__link ${filter === 'completed' ? 'selected' : ''}`}
+          className={classNames('filter__link', {
+            selected: filter === Filter.COMPLETED,
+          })}
           data-cy="FilterLinkCompleted"
           onClick={e => {
             e.preventDefault();
-            onFilterChange('completed');
+            onFilterChange(Filter.COMPLETED);
           }}
         >
           Completed
@@ -64,10 +72,7 @@ export const TodoFooter: React.FC<Props> = ({ filter, onFilterChange }) => {
         disabled={!hasCompleted}
         onClick={() => {
           clearCompleted();
-          const input = document.querySelector<HTMLInputElement>(
-            `[data-cy="NewTodoField"]`,
-          );
-          input?.focus();
+          newTodoInputRef.current?.focus();
         }}
       >
         Clear completed

@@ -1,17 +1,18 @@
 import React, { useContext } from 'react';
 import { TodoContext } from '../contexts/TodoContext';
 import { TodoItem } from './TodoItem';
+import { FilterType, Filter } from '../types/Filter';
 
 interface Props {
-  filter: 'all' | 'active' | 'completed';
+  filter: FilterType;
 }
 
 export const TodoList: React.FC<Props> = ({ filter }) => {
   const { todos } = useContext(TodoContext);
 
   const visibleTodos = todos.filter(todo => {
-    if (filter === 'active') return !todo.completed;
-    if (filter === 'completed') return todo.completed;
+    if (filter === Filter.ACTIVE) return !todo.completed;
+    if (filter === Filter.COMPLETED) return todo.completed;
     return true;
   });
 

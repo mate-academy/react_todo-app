@@ -2,7 +2,8 @@ import React, {
   createContext,
   useContext,
   useState,
-  useEffect,
+  useRef,
+  RefObject,
   useLayoutEffect,
 } from 'react';
 
@@ -16,6 +17,7 @@ interface TodoContextType {
   updateTodo: (id: number, title: string) => void;
   toggleAll: () => void;
   clearCompleted: () => void;
+  newTodoInputRef?: RefObject<HTMLInputElement>;
 }
 
 export const TodoContext = createContext<TodoContextType>({
@@ -31,6 +33,7 @@ export const TodoContext = createContext<TodoContextType>({
 export const TodoProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
+  const TodoRef = useRef<HTMLInputElement>(null);
   const [todos, setTodos] = useState<Todo[]>(() => {
     const stored = localStorage.getItem('todos');
     return stored ? JSON.parse(stored) : [];
@@ -84,6 +87,7 @@ export const TodoProvider: React.FC<{ children: React.ReactNode }> = ({
         deleteTodo,
         toggleAll,
         clearCompleted,
+        newTodoInputRef: TodoRef,
       }}
     >
       {children}

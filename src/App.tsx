@@ -4,9 +4,10 @@ import { TodoProvider, TodoContext } from './contexts/TodoContext';
 import { TodoHeader } from './components/TodoHeader';
 import { TodoList } from './components/TodoList';
 import { TodoFooter } from './components/TodoFooter';
+import { FilterType, Filter } from './types/Filter';
 
 export const TodoApp: React.FC = () => {
-  const [filter, setFilter] = useState<'all' | 'active' | 'completed'>('all');
+  const [filter, setFilter] = useState<FilterType>(Filter.ALL);
   const { todos } = useContext(TodoContext);
 
   return (

@@ -1,13 +1,15 @@
 import React, { useContext, useState } from 'react';
 import { Todo } from '../types/Todo';
 import { TodoContext } from '../contexts/TodoContext';
+import classNames from 'classnames';
 
 interface Props {
   todo: Todo;
 }
 
 export const TodoItem: React.FC<Props> = ({ todo }) => {
-  const { toggleTodo, deleteTodo, updateTodo } = useContext(TodoContext);
+  const { toggleTodo, deleteTodo, updateTodo, newTodoInputRef } =
+    useContext(TodoContext);
   const [isEditing, setIsEditing] = useState(false);
   const [editedTitle, setEditedTitle] = useState(todo.title);
 
@@ -32,16 +34,17 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
 
   const handleDelete = () => {
     deleteTodo(todo.id);
-    const input = document.querySelector<HTMLInputElement>(
-      `[data-cy="NewTodoField"]`,
-    );
-    input?.focus();
+    newTodoInputRef.current?.focus();
   };
 
   return (
-    <div data-cy="Todo" className={`todo ${todo.completed ? 'completed' : ''}`}>
+    <div
+      data-cy="Todo"
+      className={classNames('todo', { completed: todo.completed })}
+    >
       <label className="todo__status-label">
         <input
+          id={`todo-${todo.id}`}
           data-cy="TodoStatus"
           type="checkbox"
           className="todo__status"
