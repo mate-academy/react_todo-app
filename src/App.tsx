@@ -7,8 +7,13 @@ import { TodoContext } from './context/TodoContext';
 
 export const App: React.FC = () => {
   const [filter, setFilter] = useState<'all' | 'active' | 'completed'>('all');
-  const contex = useContext(TodoContext);
-  const { todos } = contex;
+  const context = useContext(TodoContext);
+
+  if (!context) {
+    return null;
+  }
+
+  const { todos } = context;
 
   return (
     <div className="todoapp">

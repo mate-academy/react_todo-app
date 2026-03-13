@@ -6,16 +6,16 @@ export const Header: React.FC = () => {
   const [title, setTitle] = useState('');
   const inputRef = useRef<HTMLInputElement>(null);
 
+  useEffect(() => {
+    inputRef.current?.focus();
+  }, [contex?.todos]);
+
   if (!contex) {
     return null;
   }
 
   const { todos, addTodo, toggleAll } = contex;
   const checkedAll = todos.every(todo => todo.completed);
-
-  useEffect(() => {
-    inputRef.current?.focus();
-  }, [todos]);
 
   function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
