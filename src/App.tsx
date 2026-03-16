@@ -4,6 +4,7 @@ import { TodoHeader } from './components/TodoHeader';
 import { TodoList } from './components/TodoList';
 import { TodoFooter } from './components/TodoFooter';
 import { TodoProvider } from './contexts/TodoContext';
+import { ErrorNotification } from './components/ErrorNotification';
 
 export const App: React.FC = () => {
   return (
@@ -16,6 +17,7 @@ export const App: React.FC = () => {
           <TodoList />
           <TodoFooter />
         </div>
+        <ErrorNotification />
       </div>
     </TodoProvider>
   );

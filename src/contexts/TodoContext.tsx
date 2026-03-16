@@ -16,6 +16,8 @@ type TodoContextType = {
   filterStatus: TodoFilterStatus;
   setFilterStatus: (filter: TodoFilterStatus) => void;
   newTitleFieldRef: React.RefObject<HTMLInputElement>;
+  errorMessage: string | null;
+  setErrorMessage: (message: string | null) => void;
 };
 
 export const TodoContext = React.createContext<TodoContextType>({
@@ -28,6 +30,8 @@ export const TodoContext = React.createContext<TodoContextType>({
   filterStatus: TODO_FILTER_STATUS.ALL,
   setFilterStatus: () => {},
   newTitleFieldRef: { current: null },
+  errorMessage: null,
+  setErrorMessage: () => {},
 });
 
 type Props = {
@@ -41,6 +45,7 @@ export const TodoProvider: React.FC<Props> = ({ children }) => {
   const [filterStatus, setFilterStatus] = useState<TodoFilterStatus>(
     TODO_FILTER_STATUS.ALL,
   );
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const newTitleFieldRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
@@ -52,6 +57,16 @@ export const TodoProvider: React.FC<Props> = ({ children }) => {
   }, [todos, filterStatus]);
 
   const addTodo = (title: string) => {
+    const normalizedTitle = title.trim();
+
+    if (!normalizedTitle) {
+      setErrorMessage('Title should not be empty');
+
+      return;
+    }
+
+    setErrorMessage(null);
+
     setTodos(prev => {
       const maxId = prev.reduce((acc, todo) => {
         return acc > todo.id ? acc : todo.id;
@@ -61,7 +76,7 @@ export const TodoProvider: React.FC<Props> = ({ children }) => {
         ...prev,
         {
           id: maxId + 1,
-          title,
+          title: normalizedTitle,
           completed: false,
         },
       ];
@@ -110,6 +125,8 @@ export const TodoProvider: React.FC<Props> = ({ children }) => {
         filterStatus,
         setFilterStatus,
         newTitleFieldRef,
+        errorMessage,
+        setErrorMessage,
       }}
     >
       {children}

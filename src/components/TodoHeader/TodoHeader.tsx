@@ -9,11 +9,7 @@ export const TodoHeader: React.FC = () => {
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-
-    if (title.trim().length > 0) {
-      addTodo(title.trim());
-    }
-
+    addTodo(title);
     setTitle('');
   };
 
