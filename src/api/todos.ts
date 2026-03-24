@@ -8,12 +8,26 @@ const TODOS_STORAGE_NAME = 'todos';
 //   return new Promise(resolve => setTimeout(resolve, time));
 // }
 
+function saveTodosToStorage(todos: Todo[]) {
+  if (todos.length === 0) {
+    localStorage.setItem(TODOS_STORAGE_NAME, '[]');
+  } else {
+    localStorage.setItem(TODOS_STORAGE_NAME, JSON.stringify(todos));
+  }
+}
+
 export function getTodosFromStorage(): Todo[] {
-  return JSON.parse(localStorage.getItem(TODOS_STORAGE_NAME) ?? '[]');
+  const todosFromStorage = localStorage.getItem(TODOS_STORAGE_NAME);
+
+  if (!todosFromStorage) {
+    localStorage.setItem(TODOS_STORAGE_NAME, '[]');
+  }
+
+  return todosFromStorage ? JSON.parse(todosFromStorage) : [];
 }
 
 export function setTodosInStorage(todos: Todo[]) {
-  localStorage.setItem(TODOS_STORAGE_NAME, JSON.stringify(todos));
+  saveTodosToStorage(todos);
 }
 
 export function addTodoToStorage(todo: Todo) {
@@ -21,7 +35,7 @@ export function addTodoToStorage(todo: Todo) {
 
   todosFromStorage.push(todo);
 
-  localStorage.setItem(TODOS_STORAGE_NAME, JSON.stringify(todosFromStorage));
+  saveTodosToStorage(todosFromStorage);
 
   return todo;
 }
@@ -31,7 +45,7 @@ export function deleteTodoFromStorage(todoId: Todo['id']) {
 
   const filteredTodosList = todosFromStorage.filter(todo => todo.id !== todoId);
 
-  localStorage.setItem(TODOS_STORAGE_NAME, JSON.stringify(filteredTodosList));
+  saveTodosToStorage(filteredTodosList);
 }
 
 export function updateTodoInStorage(
@@ -48,5 +62,5 @@ export function updateTodoInStorage(
     return todo;
   });
 
-  localStorage.setItem(TODOS_STORAGE_NAME, JSON.stringify(updatedTodosList));
+  saveTodosToStorage(updatedTodosList);
 }
