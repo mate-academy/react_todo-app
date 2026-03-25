@@ -13,6 +13,10 @@
       0 25px 50px 0 rgba(0, 0, 0, 0.1);
   }
 
+  * {
+    box-sizing: border-box;
+  }
+
   &__title {
     font-size: 100px;
     font-weight: 100;
@@ -48,6 +52,10 @@
       color: #737373;
     }
 
+    &.hidden {
+      display: none;
+    }
+
     &::before {
       content: '❯';
       transform: translateY(2px) rotate(90deg);
@@ -68,6 +76,7 @@
     -moz-osx-font-smoothing: grayscale;
 
     border: none;
+    outline: none;
     background: rgba(0, 0, 0, 0.01);
     box-shadow: inset 0 -2px 1px rgba(0, 0, 0, 0.03);
 
