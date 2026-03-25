@@ -8,7 +8,11 @@ import {
   updateTodoInStorage,
 } from '../api/todos';
 
-export type TodoFilterStatus = 'All' | 'Completed' | 'Active';
+export enum TodoFilterStatus {
+  'All' = 'All',
+  'Active' = 'Active',
+  'Completed' = 'Completed',
+}
 
 export type Todo = {
   id: number;
@@ -67,7 +71,7 @@ function reducer(state: Todo[], action: Action): Todo[] {
 
 export const TodosContext = createContext<TodosContextType>({
   todos: [],
-  todoFilterStatus: 'All',
+  todoFilterStatus: TodoFilterStatus.All,
   setTodoFilterStatus: () => {},
   deleteTodo: () => new Promise(() => {}),
   submitTodo: () => new Promise(() => {}),
@@ -77,8 +81,9 @@ export const TodosContext = createContext<TodosContextType>({
 
 export const TodosContextProvider: React.FC<Props> = ({ children }) => {
   const [state, dispatch] = useReducer(reducer, []);
-  const [todoFilterStatus, setTodoFilterStatus] =
-    useState<TodoFilterStatus>('All');
+  const [todoFilterStatus, setTodoFilterStatus] = useState<TodoFilterStatus>(
+    TodoFilterStatus.All,
+  );
 
   async function deleteTodo(todoId: Todo['id']) {
     deleteTodoFromStorage(todoId);

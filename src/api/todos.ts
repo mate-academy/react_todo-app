@@ -4,10 +4,6 @@ import { Todo } from '../components/TodosProvider';
 
 const TODOS_STORAGE_NAME = 'todos';
 
-// function timeout(time: number) {
-//   return new Promise(resolve => setTimeout(resolve, time));
-// }
-
 function saveTodosToStorage(todos: Todo[]) {
   if (todos.length === 0) {
     localStorage.setItem(TODOS_STORAGE_NAME, '[]');

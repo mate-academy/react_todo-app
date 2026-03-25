@@ -3,7 +3,7 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
 import { useContext, useState } from 'react';
 import '../styles/todo-list.scss';
-import { Todo, TodosContext } from './TodosProvider';
+import { Todo, TodoFilterStatus, TodosContext } from './TodosProvider';
 import classNames from 'classnames';
 
 export const TodoList = () => {
@@ -14,11 +14,11 @@ export const TodoList = () => {
 
   const visibleTodos = todos.filter(todo => {
     switch (todoFilterStatus) {
-      case 'All':
+      case TodoFilterStatus.All:
         return true;
-      case 'Active':
+      case TodoFilterStatus.Active:
         return !todo.completed;
-      case 'Completed':
+      case TodoFilterStatus.Completed:
         return todo.completed;
     }
   });
@@ -27,7 +27,6 @@ export const TodoList = () => {
     todoId: Todo['id'],
     event?: React.FormEvent<HTMLFormElement>,
   ) {
-
     event?.preventDefault();
     if (todoTitleInput.trim() === '') {
       deleteTodo(todoId);
@@ -39,6 +38,22 @@ export const TodoList = () => {
       title: todoTitleInput.trim(),
     });
     setSelectedTodoId(null);
+  }
+
+  function handleTodoSelect(todo: Todo) {
+    setSelectedTodoId(todo.id);
+    setTodoTitleInput(todo.title);
+  }
+
+  function handleEscapeClick(event: React.KeyboardEvent<HTMLInputElement>) {
+    if (event.key === 'Escape') {
+      setSelectedTodoId(null);
+    }
+  }
+
+  function handleUnfocusTodoTitle(todoId: Todo['id']) {
+    setSelectedTodoId(null);
+    handleTitleUpdate(todoId);
   }
 
   return (
@@ -55,7 +70,7 @@ export const TodoList = () => {
               type="checkbox"
               className="todo__status"
               checked={todo.completed}
-              onChange={() =>{
+              onChange={() => {
                 updateTodo(todo.id, { completed: !todo.completed });
               }}
             />
@@ -64,10 +79,7 @@ export const TodoList = () => {
           {selectedTodoId !== todo.id && (
             <>
               <span
-                onDoubleClick={() => {
-                  setSelectedTodoId(todo.id);
-                  setTodoTitleInput(todo.title);
-                }}
+                onDoubleClick={() => handleTodoSelect(todo)}
                 data-cy="TodoTitle"
                 className="todo__title"
               >
@@ -88,21 +100,14 @@ export const TodoList = () => {
             <form onSubmit={event => handleTitleUpdate(todo.id, event)}>
               <input
                 autoFocus
-                onKeyUp={event => {
-                  if(event.key === 'Escape') {
-                    setSelectedTodoId(null);
-                  }
-                }}
+                onKeyUp={event => handleEscapeClick(event)}
                 data-cy="TodoTitleField"
                 type="text"
                 className="todo__title-field"
                 placeholder="Empty todo will be deleted"
                 onChange={event => setTodoTitleInput(event.target.value)}
                 value={todoTitleInput}
-                onBlur={() => {
-                  setSelectedTodoId(null);
-                  handleTitleUpdate(todo.id);
-                }}
+                onBlur={() => handleUnfocusTodoTitle(todo.id)}
               />
             </form>
           )}

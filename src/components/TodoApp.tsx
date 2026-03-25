@@ -17,7 +17,6 @@ export const TodoApp = () => {
 
         <TodoList />
 
-        {/* Hide the footer if there are no todos */}
         {todos.length !== 0 && <TodoFooter />}
       </div>
     </div>
