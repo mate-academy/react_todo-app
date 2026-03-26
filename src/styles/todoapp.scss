@@ -8,9 +8,8 @@
   &__content {
     margin-bottom: 20px;
     background: #fff;
-    box-shadow:
-      0 2px 4px 0 rgba(0, 0, 0, 0.2),
-      0 25px 50px 0 rgba(0, 0, 0, 0.1);
+    box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2),
+    0 25px 50px 0 rgba(0, 0, 0, 0.1);
   }
 
   &__title {
@@ -66,6 +65,7 @@
     color: inherit;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    box-sizing: border-box;
 
     border: none;
     background: rgba(0, 0, 0, 0.01);
@@ -97,12 +97,11 @@
     text-align: center;
     border-top: 1px solid #e6e6e6;
 
-    box-shadow:
-      0 1px 1px rgba(0, 0, 0, 0.2),
-      0 8px 0 -3px #f6f6f6,
-      0 9px 1px -3px rgba(0, 0, 0, 0.2),
-      0 16px 0 -6px #f6f6f6,
-      0 17px 2px -6px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.2),
+    0 8px 0 -3px #f6f6f6,
+    0 9px 1px -3px rgba(0, 0, 0, 0.2),
+    0 16px 0 -6px #f6f6f6,
+    0 17px 2px -6px rgba(0, 0, 0, 0.2);
   }
 
   &__clear-completed {

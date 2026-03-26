@@ -1,0 +1,11 @@
+export enum ActionTypes {
+  ADD_TODOS,
+  ADD_TODO,
+  TOGGLE_TODO,
+  REMOVE_TODO,
+  EDIT_TODO,
+  TOGGLE_ALL,
+  CLEAR_COMPLETED,
+  SET_FILTER,
+  SELECT_TODO
+}
