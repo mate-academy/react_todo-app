@@ -7,5 +7,5 @@ export enum ActionTypes {
   TOGGLE_ALL,
   CLEAR_COMPLETED,
   SET_FILTER,
-  SELECT_TODO
+  SELECT_TODO,
 }
