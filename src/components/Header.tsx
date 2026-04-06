@@ -36,7 +36,7 @@ export const Header: React.FC = () => {
     setTitle('');
   };
 
-  React.useEffect(() => {
+  React.useLayoutEffect(() => {
     inputRef.current?.focus();
   }, []);
 
@@ -72,6 +72,7 @@ export const Header: React.FC = () => {
       <form onSubmit={addTodo}>
         <input
           ref={inputRef}
+          autoFocus
           data-cy="NewTodoField"
           type="text"
           className="todoapp__new-todo"
