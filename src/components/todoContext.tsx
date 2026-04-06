@@ -36,6 +36,10 @@ export const TodoProvider: React.FC<Props> = ({ children }) => {
     localStorage.setItem('todos', JSON.stringify(todos));
   }, [todos]);
 
+  React.useEffect(() => {
+    focusInput();
+  }, []);
+
   const [editingTitle, setEditingTitle] = React.useState<string>('');
   const [editingId, setEditingId] = React.useState<number | null>(null);
 

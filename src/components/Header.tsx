@@ -63,7 +63,6 @@ export const Header: React.FC = () => {
           type="text"
           className="todoapp__new-todo"
           placeholder="What needs to be done?"
-          autoFocus
           value={title}
           onChange={event => setTitle(event.target.value)}
         />
