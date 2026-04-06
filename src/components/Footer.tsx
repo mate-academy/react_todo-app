@@ -10,7 +10,7 @@ import { TodoContext } from './TodoContext';
 
 type FooterProps = {};
 export const Footer: React.FC<FooterProps> = () => {
-  const { todos, setTodos, filter, setFilter, focusInput } =
+  const { todos, setTodos, filter, setFilter, setShouldFocus } =
     React.useContext(TodoContext)!;
   const handleFilterChange = (
     event: React.MouseEvent<HTMLAnchorElement>,
@@ -23,7 +23,7 @@ export const Footer: React.FC<FooterProps> = () => {
   const clearCompleted = () => {
     setTodos(prev => prev.filter(todo => !todo.completed));
     setTimeout(() => {
-      focusInput();
+      setShouldFocus(true);
     }, 0);
   };
 

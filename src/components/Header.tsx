@@ -6,8 +6,10 @@ import { TodoContext } from './TodoContext';
 let todoIdCounter = 1;
 
 export const Header: React.FC = () => {
-  const { todos, setTodos, inputRef } = React.useContext(TodoContext)!;
+  const { todos, setTodos, shouldFocus, setShouldFocus } =
+    React.useContext(TodoContext)!;
   const [title, setTitle] = React.useState<string>('');
+  const inputRef = React.useRef<HTMLInputElement>(null);
   const addTodo = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const trimmed = title.trim();
@@ -35,10 +37,15 @@ export const Header: React.FC = () => {
   };
 
   React.useEffect(() => {
-    setTimeout(() => {
-      inputRef.current?.focus();
-    }, 0);
+    inputRef.current?.focus();
   }, []);
+
+  React.useEffect(() => {
+    if (shouldFocus) {
+      inputRef.current?.focus();
+      setShouldFocus(false);
+    }
+  }, [shouldFocus, setShouldFocus]);
 
   const handleToggleAll = () => {
     const updatedTodos = todos.map(todo => ({

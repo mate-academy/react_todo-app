@@ -7,13 +7,13 @@ type TodoContextType = {
   setTodos: React.Dispatch<React.SetStateAction<Todo[]>>;
   filter: Filter;
   setFilter: React.Dispatch<React.SetStateAction<Filter>>;
-  inputRef: React.RefObject<HTMLInputElement>;
-  focusInput: () => void;
   editingTitle: string;
   setEditingTitle: React.Dispatch<React.SetStateAction<string>>;
   editingId: number | null;
   setEditingId: React.Dispatch<React.SetStateAction<number | null>>;
   deleteTodo: (id: number) => void;
+  shouldFocus: boolean;
+  setShouldFocus: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
 export const TodoContext = React.createContext<TodoContextType | null>(null);
@@ -29,8 +29,7 @@ export const TodoProvider: React.FC<Props> = ({ children }) => {
     return saved ? JSON.parse(saved) : [];
   });
   const [filter, setFilter] = React.useState<Filter>(FILTER_ALL);
-  const inputRef = React.useRef<HTMLInputElement>(null);
-  const focusInput = () => inputRef.current?.focus();
+  const [shouldFocus, setShouldFocus] = React.useState<boolean>(false);
 
   React.useEffect(() => {
     localStorage.setItem('todos', JSON.stringify(todos));
@@ -42,7 +41,7 @@ export const TodoProvider: React.FC<Props> = ({ children }) => {
   const deleteTodo = (id: number) => {
     setTodos(prev => prev.filter(todo => todo.id !== id));
     setTimeout(() => {
-      focusInput();
+      setShouldFocus(true);
     }, 0);
   };
 
@@ -53,13 +52,13 @@ export const TodoProvider: React.FC<Props> = ({ children }) => {
         setTodos,
         filter,
         setFilter,
-        inputRef,
-        focusInput,
         editingTitle,
         setEditingTitle,
         editingId,
         setEditingId,
         deleteTodo,
+        shouldFocus,
+        setShouldFocus,
       }}
     >
       {children}
