@@ -41,6 +41,7 @@ module.exports = {
     'semi': 'off',
     '@typescript-eslint/semi': ['error', 'always'],
     'prefer-const': 2,
+    'import/extensions': 'off',
     curly: [2, 'all'],
     'max-len': ['error', {
       ignoreTemplateLiterals: true,
