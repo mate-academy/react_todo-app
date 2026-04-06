@@ -34,6 +34,10 @@ export const Header: React.FC = () => {
     setTitle('');
   };
 
+  React.useEffect(() => {
+    inputRef.current?.focus();
+  }, []);
+
   const handleToggleAll = () => {
     const updatedTodos = todos.map(todo => ({
       ...todo,
