@@ -3,6 +3,8 @@ import classNames from 'classnames';
 import { Todo } from '../types/Todo';
 import { TodoContext } from './TodoContext';
 
+let todoIdCounter = 1;
+
 export const Header: React.FC = () => {
   const { todos, setTodos, inputRef } = React.useContext(TodoContext)!;
   const [title, setTitle] = React.useState<string>('');
@@ -14,8 +16,16 @@ export const Header: React.FC = () => {
       return;
     }
 
+    if (todos.length > 0) {
+      const maxId = Math.max(...todos.map(todo => todo.id));
+
+      if (maxId >= todoIdCounter) {
+        todoIdCounter = maxId + 1;
+      }
+    }
+
     const newTodo: Todo = {
-      id: +new Date(),
+      id: todoIdCounter++,
       title: trimmed,
       completed: false,
     };
