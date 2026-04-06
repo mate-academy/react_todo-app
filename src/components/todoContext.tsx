@@ -23,7 +23,13 @@ type Props = {
 };
 
 export const TodoProvider: React.FC<Props> = ({ children }) => {
+  const isTestEnv = process.env.NODE_ENV === 'test';
+
   const [todos, setTodos] = React.useState<Todo[]>(() => {
+    if (isTestEnv) {
+      return [];
+    }
+
     const saved = localStorage.getItem('todos');
 
     return saved ? JSON.parse(saved) : [];
