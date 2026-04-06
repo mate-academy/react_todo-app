@@ -1,10 +1,17 @@
 import React from 'react';
-import { Filter } from '../types/Filter';
-import { todoContext } from './todoContext';
+import classNames from 'classnames';
+import {
+  Filter,
+  FILTER_ALL,
+  FILTER_ACTIVE,
+  FILTER_COMPLETED,
+} from '../types/Filter';
+import { TodoContext } from './TodoContext';
 
-type FooterProps = { focusInput: () => void };
-export const Footer: React.FC<FooterProps> = ({ focusInput }) => {
-  const { todos, setTodos, filter, setFilter } = React.useContext(todoContext)!;
+type FooterProps = {};
+export const Footer: React.FC<FooterProps> = () => {
+  const { todos, setTodos, filter, setFilter, focusInput } =
+    React.useContext(TodoContext)!;
   const handleFilterChange = (
     event: React.MouseEvent<HTMLAnchorElement>,
     newFilter: Filter,
@@ -29,27 +36,33 @@ export const Footer: React.FC<FooterProps> = ({ focusInput }) => {
       <nav className="filter" data-cy="Filter">
         <a
           href="#/"
-          className={`filter__link${filter === 'all' ? ' selected' : ''}`}
+          className={classNames('filter__link', {
+            selected: filter === FILTER_ALL,
+          })}
           data-cy="FilterLinkAll"
-          onClick={e => handleFilterChange(e, 'all')}
+          onClick={e => handleFilterChange(e, FILTER_ALL)}
         >
           All
         </a>
 
         <a
           href="#/active"
-          className={`filter__link${filter === 'active' ? ' selected' : ''}`}
+          className={classNames('filter__link', {
+            selected: filter === FILTER_ACTIVE,
+          })}
           data-cy="FilterLinkActive"
-          onClick={e => handleFilterChange(e, 'active')}
+          onClick={e => handleFilterChange(e, FILTER_ACTIVE)}
         >
           Active
         </a>
 
         <a
           href="#/completed"
-          className={`filter__link${filter === 'completed' ? ' selected' : ''}`}
+          className={classNames('filter__link', {
+            selected: filter === FILTER_COMPLETED,
+          })}
           data-cy="FilterLinkCompleted"
-          onClick={e => handleFilterChange(e, 'completed')}
+          onClick={e => handleFilterChange(e, FILTER_COMPLETED)}
         >
           Completed
         </a>

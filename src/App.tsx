@@ -1,20 +1,25 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
 import React, { useContext } from 'react';
 import { Todo } from './types/Todo';
-import { Filter } from './types/Filter';
+import {
+  Filter,
+  FILTER_ALL,
+  FILTER_ACTIVE,
+  FILTER_COMPLETED,
+} from './types/Filter';
 // eslint-disable-next-line import/extensions
 import { Header } from './components/Header';
 import { Section } from './components/Section';
 import { Footer } from './components/Footer';
-import { todoContext } from './components/todoContext';
+import { TodoContext } from './components/TodoContext';
 
 const getFilteredTodos = (todos: Todo[], filter: Filter): Todo[] => {
   switch (filter) {
-    case 'all':
+    case FILTER_ALL:
       return todos;
-    case 'active':
+    case FILTER_ACTIVE:
       return todos.filter(todo => !todo.completed);
-    case 'completed':
+    case FILTER_COMPLETED:
       return todos.filter(todo => todo.completed);
     default:
       return todos;
@@ -22,32 +27,18 @@ const getFilteredTodos = (todos: Todo[], filter: Filter): Todo[] => {
 };
 
 export const App: React.FC = () => {
-  const { todos, filter } = useContext(todoContext)!;
+  const { todos, filter } = useContext(TodoContext)!;
   const filteredTodos = getFilteredTodos(todos, filter);
-  const [editingId, setEditingId] = React.useState<number | null>(null);
-  const [editingTitle, setEditingTitle] = React.useState<string>('');
-  const inputRef = React.useRef<HTMLInputElement>(null);
 
   return (
     <div className="todoapp">
       <h1 className="todoapp__title">todos</h1>
 
       <div className="todoapp__content">
-        <Header inputRef={inputRef} />
-        {todos.length > 0 && (
-          <Section
-            filteredTodos={filteredTodos}
-            editingId={editingId}
-            setEditingId={setEditingId}
-            editingTitle={editingTitle}
-            setEditingTitle={setEditingTitle}
-            focusInput={() => inputRef.current?.focus()}
-          />
-        )}
+        <Header />
+        {todos.length > 0 && <Section filteredTodos={filteredTodos} />}
 
-        {todos.length > 0 && (
-          <Footer focusInput={() => inputRef.current?.focus()} />
-        )}
+        {todos.length > 0 && <Footer />}
       </div>
     </div>
   );

@@ -1,10 +1,10 @@
 import React from 'react';
+import classNames from 'classnames';
 import { Todo } from '../types/Todo';
-import { todoContext } from './todoContext';
+import { TodoContext } from './TodoContext';
 
-type HeaderProps = { inputRef: React.RefObject<HTMLInputElement> };
-export const Header: React.FC<HeaderProps> = ({ inputRef }) => {
-  const { todos, setTodos } = React.useContext(todoContext)!;
+export const Header: React.FC = () => {
+  const { todos, setTodos, inputRef } = React.useContext(TodoContext)!;
   const [title, setTitle] = React.useState<string>('');
   const addTodo = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -38,7 +38,9 @@ export const Header: React.FC<HeaderProps> = ({ inputRef }) => {
       {todos.length > 0 && (
         <button
           type="button"
-          className={`todoapp__toggle-all ${todos.every(todo => todo.completed) ? 'active' : ''}`}
+          className={classNames('todoapp__toggle-all', {
+            active: todos.every(todo => todo.completed),
+          })}
           data-cy="ToggleAllButton"
           onClick={handleToggleAll}
         />

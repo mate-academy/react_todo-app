@@ -1,25 +1,17 @@
 import React from 'react';
+import classNames from 'classnames';
 import { Todo } from '../types/Todo';
-import { todoContext } from './todoContext';
+import { TodoContext } from './TodoContext';
+import { NewTodo } from './NewTodo';
+import { RemoveTodo } from './RemoveTodo';
 
 type Props = {
   filteredTodos: Todo[];
-  editingId: number | null;
-  setEditingId: React.Dispatch<React.SetStateAction<number | null>>;
-  editingTitle: string;
-  setEditingTitle: React.Dispatch<React.SetStateAction<string>>;
-  focusInput: () => void;
 };
 
-export const Section: React.FC<Props> = ({
-  filteredTodos,
-  editingId,
-  setEditingId,
-  editingTitle,
-  setEditingTitle,
-  focusInput,
-}) => {
-  const { todos, setTodos } = React.useContext(todoContext)!;
+export const Section: React.FC<Props> = ({ filteredTodos }) => {
+  const { todos, setTodos, editingId, setEditingId, setEditingTitle } =
+    React.useContext(TodoContext)!;
 
   const updateMark = (id: number, completed: boolean) => {
     const updatedTodos = todos.map(todo =>
@@ -29,26 +21,13 @@ export const Section: React.FC<Props> = ({
     setTodos(updatedTodos);
   };
 
-  const updateOnBlur = (id: number, newTitle: string) => {
-    setTodos(prev =>
-      prev.map(todo => (todo.id === id ? { ...todo, title: newTitle } : todo)),
-    );
-  };
-
-  const deleteTodo = (id: number) => {
-    setTodos(prev => prev.filter(todo => todo.id !== id));
-    setTimeout(() => {
-      focusInput();
-    }, 0);
-  };
-
   return (
     <section className="todoapp__main" data-cy="TodoList">
       {filteredTodos.map(todo => (
         <div
           key={todo.id}
           data-cy="Todo"
-          className={`todo ${todo.completed ? 'completed' : ''}`}
+          className={classNames('todo', { completed: todo.completed })}
         >
           <label className="todo__status-label">
             <input
@@ -64,32 +43,7 @@ export const Section: React.FC<Props> = ({
           </label>
 
           {editingId === todo.id ? (
-            <input
-              data-cy="TodoTitleField"
-              type="text"
-              className="todo__title-field"
-              value={editingTitle}
-              autoFocus
-              onChange={e => setEditingTitle(e.target.value)}
-              onBlur={() => {
-                const trimmed = editingTitle.trim();
-
-                if (trimmed) {
-                  updateOnBlur(todo.id, trimmed);
-                } else {
-                  deleteTodo(todo.id);
-                }
-
-                setEditingId(null);
-              }}
-              onKeyDown={e => {
-                if (e.key === 'Enter') {
-                  (e.target as HTMLInputElement).blur();
-                } else if (e.key === 'Escape') {
-                  setEditingId(null);
-                }
-              }}
-            />
+            <NewTodo todo={todo} />
           ) : (
             <span
               data-cy="TodoTitle"
@@ -103,18 +57,7 @@ export const Section: React.FC<Props> = ({
             </span>
           )}
 
-          {editingId !== todo.id && (
-            <button
-              type="button"
-              className="todo__remove"
-              data-cy="TodoDelete"
-              onClick={() => {
-                deleteTodo(todo.id);
-              }}
-            >
-              ×
-            </button>
-          )}
+          {editingId !== todo.id && <RemoveTodo todo={todo} />}
         </div>
       ))}
     </section>
