@@ -6,6 +6,7 @@ import React, {
   useRef,
   useState,
 } from 'react';
+
 import { Todo } from '../Types/Todo';
 import { QueryFilter } from '../Types/QueryFilter';
 
