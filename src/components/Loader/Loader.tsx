@@ -1,0 +1,21 @@
+import classNames from 'classnames';
+
+type Props = {
+  isLoading: boolean;
+};
+
+export const Loader = ({ isLoading }: Props) => {
+  if (!isLoading) {
+    return null;
+  }
+
+  return (
+    <div
+      data-cy="TodoLoader"
+      className={classNames('modal overlay', { 'is-active': isLoading })}
+    >
+      <div className="modal-background has-background-white-ter" />
+      <div className="loader" />
+    </div>
+  );
+};
