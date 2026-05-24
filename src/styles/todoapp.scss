@@ -25,6 +25,10 @@
 
   &__header {
     position: relative;
+
+    form {
+      margin: 0;
+    }
   }
 
   &__toggle-all {
@@ -56,6 +60,7 @@
   }
 
   &__new-todo {
+    box-sizing: border-box;
     width: 100%;
     padding: 16px 16px 16px 60px;
 
@@ -68,6 +73,7 @@
     -moz-osx-font-smoothing: grayscale;
 
     border: none;
+    outline: none;
     background: rgba(0, 0, 0, 0.01);
     box-shadow: inset 0 -2px 1px rgba(0, 0, 0, 0.03);
 
