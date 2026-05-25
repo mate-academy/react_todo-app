@@ -6,7 +6,7 @@
   justify-items: stretch;
 
   font-size: 24px;
-  line-height: 1.4em;
+  line-height: 1.6em;
   border-bottom: 1px solid #ededed;
 
   &:last-child {
@@ -29,7 +29,7 @@
   }
 
   &__title {
-    padding: 12px 15px;
+    padding: 16px 20px;
 
     word-break: break-all;
     transition: color 0.4s;
@@ -43,7 +43,8 @@
   &__remove {
     position: absolute;
     right: 12px;
-    top: 0;
+    top: 50%;
+    transform: translateY(-50%);
     bottom: 0;
 
     font-size: 120%;
@@ -71,8 +72,10 @@
   }
 
   &__title-field {
+    box-sizing: border-box;
+
     width: 100%;
-    padding: 11px 14px;
+    padding: 14px 18px;
 
     font-size: inherit;
     line-height: inherit;
