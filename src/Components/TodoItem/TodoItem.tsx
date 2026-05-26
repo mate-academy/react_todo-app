@@ -3,7 +3,7 @@
 import classNames from 'classnames';
 
 import React, { useContext, useEffect, useState } from 'react';
-import { Todo } from '../../types/todo';
+import { Todo } from '../../types/Todo';
 import { TodoContext } from '../../TodoContext';
 
 type Props = {
