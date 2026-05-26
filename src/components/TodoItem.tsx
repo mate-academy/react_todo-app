@@ -53,6 +53,18 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
     setEditTodoId(null);
   };
 
+  const handleKeyDown: React.KeyboardEventHandler<HTMLInputElement> = event => {
+    if (event.key === 'Escape') {
+      event.preventDefault();
+      handleCancel();
+    }
+  };
+
+  const handleDoubleCkick = () => {
+    setEditTodoId(todo.id);
+    setEditTitle(todo.title);
+  };
+
   const handleClick = (id: number) => {
     setTodos(current =>
       current.map(t => {
@@ -94,12 +106,7 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
             className="todo__title-field"
             placeholder="Empty todo will be deleted"
             onChange={handleChange}
-            onKeyDown={event => {
-              if (event.key === 'Escape') {
-                event.preventDefault();
-                handleCancel();
-              }
-            }}
+            onKeyDown={handleKeyDown}
             autoFocus
           />
         </form>
@@ -108,10 +115,7 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
           <span
             data-cy="TodoTitle"
             className="todo__title"
-            onDoubleClick={() => {
-              setEditTodoId(todo.id);
-              setEditTitle(todo.title);
-            }}
+            onDoubleClick={() => handleDoubleCkick()}
           >
             {todo.title}
           </span>

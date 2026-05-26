@@ -11,6 +11,24 @@ export const TodoFooter: React.FC = () => {
     setTodos(current => current.filter(t => !t.completed));
   };
 
+  const filterring = [
+    {
+      title: 'All',
+      type: Filter.All,
+      dataCy: 'FilterLinkAll',
+    },
+    {
+      title: 'Active',
+      type: Filter.Active,
+      dataCy: 'FilterLinkActive',
+    },
+    {
+      title: 'Completed',
+      type: Filter.Completed,
+      dataCy: 'FilterLinkCompleted',
+    },
+  ];
+
   return (
     <footer className="todoapp__footer" data-cy="Footer">
       <span className="todo-count" data-cy="TodosCounter">
@@ -18,38 +36,21 @@ export const TodoFooter: React.FC = () => {
       </span>
 
       <nav className="filter" data-cy="Filter">
-        <a
-          href="#/"
-          className={classNames('filter__link', {
-            selected: filter === Filter.All,
-          })}
-          data-cy="FilterLinkAll"
-          onClick={() => setFilter(Filter.All)}
-        >
-          All
-        </a>
-
-        <a
-          href="#/active"
-          className={classNames('filter__link', {
-            selected: filter === Filter.Active,
-          })}
-          data-cy="FilterLinkActive"
-          onClick={() => setFilter(Filter.Active)}
-        >
-          Active
-        </a>
-
-        <a
-          href="#/completed"
-          className={classNames('filter__link', {
-            selected: filter === Filter.Completed,
-          })}
-          data-cy="FilterLinkCompleted"
-          onClick={() => setFilter(Filter.Completed)}
-        >
-          Completed
-        </a>
+        {filterring.map(f => {
+          return (
+            <a
+              href="#/"
+              key={f.type}
+              className={classNames('filter__link', {
+                selected: filter === f.type,
+              })}
+              data-cy={f.dataCy}
+              onClick={() => setFilter(f.type)}
+            >
+              {f.title}
+            </a>
+          );
+        })}
       </nav>
 
       <button
