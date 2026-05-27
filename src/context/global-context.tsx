@@ -1,26 +1,7 @@
 import React from 'react';
-
-type Action =
-  | { type: 'add'; payload: Todo }
-  | { type: 'remove'; payload: { id: number } }
-  | { type: 'toggle'; payload: { id: number } }
-  | { type: 'edit'; payload: { id: number; title: string } }
-  | { type: 'setFilter'; payload: FilterType }
-  | { type: 'clearCompleted' }
-  | { type: 'toggle_all' };
-
-export type Todo = {
-  id: number;
-  title: string;
-  completed: boolean;
-};
-
-export type FilterType = 'all' | 'active' | 'completed';
-
-export type State = {
-  todos: Todo[];
-  filter: FilterType;
-};
+import { State } from '../types/state';
+import { FilterType } from '../types/filters';
+import { Action } from '../types/action';
 
 const getInitialState = (): State => {
   const saved = localStorage.getItem('todos');
