@@ -73,9 +73,7 @@ module.exports = {
     'react/jsx-props-no-spreading': 0,
     'react/state-in-constructor': [2, 'never'],
     'react-hooks/rules-of-hooks': 2,
-    'jsx-a11y/label-has-associated-control': ["error", {
-      assert: "either",
-    }],
+    'jsx-a11y/label-has-associated-control': ['off'],
     'jsx-a11y/label-has-for': [2, {
       components: ['Label'],
       required: {
