@@ -44,7 +44,6 @@ export const HeaderForm = () => {
         value={value}
         onChange={e => setValue(e.target.value)}
         ref={inputRef}
-        autoFocus
       />
     </form>
   );
