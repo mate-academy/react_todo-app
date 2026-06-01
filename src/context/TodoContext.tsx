@@ -26,7 +26,7 @@ const TodoContext = createContext<TodoContextType | null>(null);
 export function useTodos() {
   const context = useContext(TodoContext);
 
-  if (context === null) {
+  if (!context) {
     throw new Error('useTodos must be used within a TodoProvider');
   }
 

@@ -14,9 +14,7 @@ export const TodoApp: React.FC = () => {
 
       <div className="todoapp__content">
         <header className="todoapp__header">
-          {/* this button should have `active` class only if all todos are completed */}
-
-          {todos.length > 0 && (
+          {!!todos.length && (
             <button
               type="button"
               className={`todoapp__toggle-all ${todos.every(todo => todo.completed) ? 'active' : ''}`}
@@ -24,13 +22,11 @@ export const TodoApp: React.FC = () => {
               onClick={() => toggleAll(!todos.every(todo => todo.completed))}
             />
           )}
-          {/* Add a todo on form submit */}
           <TodoForm />
         </header>
 
-        {todos.length > 0 && <TodoList />}
-        {/* Hide the footer if there are no todos */}
-        {todos.length > 0 && <Footer />}
+        {!!todos.length && <TodoList />}
+        {!!todos.length && <Footer />}
       </div>
     </div>
   );
