@@ -1,27 +1,19 @@
-import React, { useContext, useState } from 'react';
-import { TodoContext } from '../../context/TodoContext';
+import React, { useState } from 'react';
+import { useTodo } from '../../context/TodoContext';
 
 export const NewTodo: React.FC = () => {
-  const todoContext = useContext(TodoContext);
-
-  if (!todoContext) {
-    throw new Error('TodoContext must be used within a TodoProvider');
-  }
-
-  const { addTodo } = todoContext;
+  const { addTodo, shouldFocusInput, setShouldFocusInput } = useTodo();
   const [newTodoTitle, setNewTodoTitle] = useState('');
+
+  const inputRef = React.useRef<HTMLInputElement>(null);
 
   const handleSubmit = (event: React.FormEvent) => {
     event.preventDefault();
-
     if (newTodoTitle.trim()) {
       addTodo(newTodoTitle.trim());
       setNewTodoTitle('');
     }
   };
-
-  const inputRef = React.useRef<HTMLInputElement>(null);
-  const { shouldFocusInput, setShouldFocusInput } = todoContext;
 
   React.useEffect(() => {
     inputRef.current?.focus();

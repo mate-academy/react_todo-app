@@ -1,10 +1,11 @@
+import cn from 'classnames';
 import { useTodo } from '../../context/TodoContext';
 import { NewTodo } from '../NewTodo';
 
 export const Header: React.FC = () => {
   const { todos, toggleAll } = useTodo();
 
-  const onClick = () => {
+  const handleToggleAll = () => {
     toggleAll();
   };
 
@@ -14,10 +15,10 @@ export const Header: React.FC = () => {
       {todos.length > 0 && (
         <button
           type="button"
-          className={`todoapp__toggle-all ${
-            todos.every(todo => todo.completed) ? 'active' : ''
-          }`}
-          onClick={onClick}
+          className={cn('todoapp__toggle-all', {
+            active: todos.every(todo => todo.completed),
+          })}
+          onClick={handleToggleAll}
           data-cy="ToggleAllButton"
         />
       )}

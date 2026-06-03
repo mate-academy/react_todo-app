@@ -1,3 +1,4 @@
+import cn from 'classnames';
 import React, { useState, useEffect } from 'react';
 import { Todo, useTodo } from '../../context/TodoContext';
 
@@ -33,7 +34,7 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
   }, [isEditing]);
 
   return (
-    <div data-cy="Todo" className={`todo ${todo.completed ? 'completed' : ''}`}>
+    <div data-cy="Todo" className={cn('todo', { completed: todo.completed })}>
       <label
         className="todo__status-label"
         htmlFor={`todo-status-${todo.id}`}

@@ -1,21 +1,21 @@
 import React from 'react';
-import { FilterType, useTodo } from '../../context/TodoContext';
+import cn from 'classnames';
+import { FILTERS } from '../../utils/filters';
+
+import { useTodo } from '../../context/TodoContext';
 
 export const Filter: React.FC = () => {
   const { filter, setFilter } = useTodo();
-  const onClick = (newFilter: FilterType) => {
-    setFilter(newFilter);
-  };
 
   return (
     <nav className="filter" data-cy="Filter">
       <a
         href="#/"
-        className={`filter__link ${filter === 'all' ? 'selected' : ''}`}
+        className={cn('filter__link', { selected: filter === FILTERS.all })}
         data-cy="FilterLinkAll"
         onClick={event => {
           event.preventDefault();
-          onClick('all');
+          setFilter(FILTERS.all);
         }}
       >
         All
@@ -23,11 +23,11 @@ export const Filter: React.FC = () => {
 
       <a
         href="#/active"
-        className={`filter__link ${filter === 'active' ? 'selected' : ''}`}
+        className={cn('filter__link', { selected: filter === FILTERS.active })}
         data-cy="FilterLinkActive"
         onClick={event => {
           event.preventDefault();
-          onClick('active');
+          setFilter(FILTERS.active);
         }}
       >
         Active
@@ -35,11 +35,13 @@ export const Filter: React.FC = () => {
 
       <a
         href="#/completed"
-        className={`filter__link ${filter === 'completed' ? 'selected' : ''}`}
+        className={cn('filter__link', {
+          selected: filter === FILTERS.completed,
+        })}
         data-cy="FilterLinkCompleted"
         onClick={event => {
           event.preventDefault();
-          onClick('completed');
+          setFilter(FILTERS.completed);
         }}
       >
         Completed

@@ -1,15 +1,16 @@
 import React from 'react';
 import { useTodo } from '../../context/TodoContext';
 import { TodoItem } from '../TodoItem';
+import { FILTERS } from '../../utils/filters';
 
 export const TodoList: React.FC = () => {
   const { todos, filter } = useTodo();
 
   const filteredTodos = todos.filter(todo => {
     switch (filter) {
-      case 'active':
+      case FILTERS.active:
         return !todo.completed;
-      case 'completed':
+      case FILTERS.completed:
         return todo.completed;
       default:
         return true;

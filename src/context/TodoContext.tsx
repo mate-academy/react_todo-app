@@ -1,17 +1,21 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
+import { FILTERS } from '../utils/filters';
+
+export type FilterType = (typeof FILTERS)[keyof typeof FILTERS];
+
+let nextId = 1;
+
 export type Todo = {
   id: number;
   title: string;
   completed: boolean;
 };
 
-export type FilterType = 'all' | 'active' | 'completed';
-
 export type TodoContextType = {
   todos: Todo[];
   filter: FilterType;
   addTodo: (title: string) => void;
-  deleteTodo: (id: number, onDelete?: () => void) => void;
+  deleteTodo: (id: number) => void;
   toggleTodo: (id: number) => void;
   toggleAll: () => void;
   updateTodoTitle: (id: number, title: string) => void;
@@ -48,7 +52,7 @@ export const TodoProvider: React.FC<{ children: React.ReactNode }> = ({
 
   const addTodo = (title: string) => {
     const newTodo: Todo = {
-      id: +new Date(),
+      id: nextId++,
       title,
       completed: false,
     };
@@ -58,11 +62,8 @@ export const TodoProvider: React.FC<{ children: React.ReactNode }> = ({
 
   const [shouldFocusInput, setShouldFocusInput] = useState(false);
 
-  const deleteTodo = (id: number, onDelete?: () => void) => {
+  const deleteTodo = (id: number) => {
     setTodos(todos.filter(todo => todo.id !== id));
-    if (onDelete) {
-      onDelete();
-    }
 
     setShouldFocusInput(true);
   };
