@@ -1,4 +1,5 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
+import React, { useEffect, useRef, useState } from 'react';
 import cn from 'classnames';
 import { Todo } from '../types/Todo';
 import { useTodoContext } from '../context/TodoContext';
@@ -8,13 +9,16 @@ interface Props {
 }
 
 export const TodoItem: React.FC<Props> = ({ todo }) => {
-  const {
-    dispatch,
-    newTodoField,
-    setEditingTodo,
-    editingTodo,
-    editingTodoElement,
-  } = useTodoContext();
+  const { dispatch, newTodoField } = useTodoContext();
+
+  const [editingTodo, setEditingTodo] = useState<Todo | null>(null);
+  const editingTodoElement = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    if (editingTodo) {
+      editingTodoElement.current?.focus();
+    }
+  }, [editingTodo]);
 
   const handleDeleteTodo = () => {
     dispatch({ type: 'deleteTodo', payload: todo.id });
