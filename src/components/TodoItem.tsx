@@ -51,23 +51,20 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
 
   return (
     <div data-cy="Todo" className={`todo ${todo.completed ? 'completed' : ''}`}>
-      <label htmlFor={`todo-${todo.id}`} className="todo__status-label">
-        Toggle todo
+      <label className="todo__status-label" aria-label="Toggle todo">
+        <input
+          data-cy="TodoStatus"
+          type="checkbox"
+          className="todo__status"
+          checked={todo.completed}
+          onChange={() =>
+            dispatch({
+              type: 'toggleTodo',
+              payload: todo.id,
+            })
+          }
+        />
       </label>
-
-      <input
-        id={`todo-${todo.id}`}
-        data-cy="TodoStatus"
-        type="checkbox"
-        className="todo__status"
-        checked={todo.completed}
-        onChange={() =>
-          dispatch({
-            type: 'toggleTodo',
-            payload: todo.id,
-          })
-        }
-      />
 
       {isEditing ? (
         <form onSubmit={handleSubmit}>
