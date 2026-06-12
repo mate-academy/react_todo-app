@@ -1,12 +1,10 @@
 import React from 'react';
-import { useTodos } from '../context/TodoContext';
+import { useTodos, FilterType } from '../context/TodoContext';
 
 export const TodoFooter: React.FC = () => {
-  // Дістаємо всі потрібні змінні та функції з Контексту
   const { todos, filter, setFilter, clearCompleted } = useTodos();
 
   const activeTodosCount = todos.filter(todo => !todo.completed).length;
-  // Перевіряємо, чи є хоча б одна виконана справа
   const hasCompleted = todos.some(todo => todo.completed);
 
   return (
@@ -16,38 +14,30 @@ export const TodoFooter: React.FC = () => {
       </span>
 
       <nav className="filter" data-cy="Filter">
-        <a
-          href="#/"
-          className={`filter__link ${filter === 'all' ? 'selected' : ''}`}
-          data-cy="FilterLinkAll"
-          onClick={() => setFilter('all')}
-        >
-          All
-        </a>
-        <a
-          href="#/active"
-          className={`filter__link ${filter === 'active' ? 'selected' : ''}`}
-          data-cy="FilterLinkActive"
-          onClick={() => setFilter('active')}
-        >
-          Active
-        </a>
-        <a
-          href="#/completed"
-          className={`filter__link ${filter === 'completed' ? 'selected' : ''}`}
-          data-cy="FilterLinkCompleted"
-          onClick={() => setFilter('completed')}
-        >
-          Completed
-        </a>
+        {Object.values(FilterType).map(filterValue => {
+          const title =
+            filterValue.charAt(0).toUpperCase() + filterValue.slice(1);
+
+          return (
+            <a
+              key={filterValue}
+              href={filterValue === FilterType.All ? '#/' : `#/${filterValue}`}
+              className={`filter__link ${filter === filterValue ? 'selected' : ''}`}
+              data-cy={`FilterLink${title}`}
+              onClick={() => setFilter(filterValue)}
+            >
+              {title}
+            </a>
+          );
+        })}
       </nav>
 
       <button
         type="button"
         className="todoapp__clear-completed"
         data-cy="ClearCompletedButton"
-        disabled={!hasCompleted} // Кнопка вимикається, якщо виконаних справ немає
-        onClick={clearCompleted} // Запускаємо очищення
+        disabled={!hasCompleted}
+        onClick={clearCompleted}
       >
         Clear completed
       </button>

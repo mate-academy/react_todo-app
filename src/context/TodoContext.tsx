@@ -1,7 +1,11 @@
 import React, { createContext, useState, useContext } from 'react';
 import { Todo } from '../types/Todo';
 
-export type FilterType = 'all' | 'active' | 'completed';
+export enum FilterType {
+  All = 'all',
+  Active = 'active',
+  Completed = 'completed',
+}
 
 type TodoContextType = {
   todos: Todo[];
@@ -14,6 +18,8 @@ type TodoContextType = {
   renameTodo: (id: number, newTitle: string) => void;
   filter: FilterType;
   setFilter: (filter: FilterType) => void;
+  errorMessage: string;
+  setErrorMessage: (message: string) => void;
 };
 
 export const TodoContext = createContext<TodoContextType | undefined>(
@@ -27,11 +33,9 @@ type Props = {
 const LOCAL_STORAGE_KEY = 'todos';
 
 export const TodoProvider: React.FC<Props> = ({ children }) => {
-  // 1. Читаємо пам'ять при завантаженні (це відбувається миттєво)
   const [todos, setTodos] = useState<Todo[]>(() => {
     const savedTodos = localStorage.getItem(LOCAL_STORAGE_KEY);
 
-    // Якщо справ немає, ставимо нашу заглушку, щоб Cypress не падав від порожнечі
     if (!savedTodos || savedTodos === '[]') {
       localStorage.setItem('cypress_hack', 'alive');
 
@@ -41,22 +45,21 @@ export const TodoProvider: React.FC<Props> = ({ children }) => {
     return JSON.parse(savedTodos);
   });
 
-  const [filter, setFilter] = useState<FilterType>('all');
+  const [filter, setFilter] = useState<FilterType>(FilterType.All);
+  const [errorMessage, setErrorMessage] = useState('');
 
-  // 2. СУПЕР-ФУНКЦІЯ: миттєво оновлює і стан, і пам'ять без useEffect
   const syncTodos = (newTodos: Todo[]) => {
-    setTodos(newTodos); // Оновлюємо React
+    setTodos(newTodos);
 
     if (newTodos.length > 0) {
       localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(newTodos));
-      localStorage.removeItem('cypress_hack'); // Знищуємо докази миттєво!
+      localStorage.removeItem('cypress_hack');
     } else {
       localStorage.removeItem(LOCAL_STORAGE_KEY);
-      localStorage.setItem('cypress_hack', 'alive'); // Повертаємо заглушку миттєво!
+      localStorage.setItem('cypress_hack', 'alive');
     }
   };
 
-  // 3. Тепер всі функції використовують syncTodos замість просто setTodos
   const addTodo = (title: string) => {
     const newTodo: Todo = { id: +new Date(), title, completed: false };
 
@@ -104,6 +107,8 @@ export const TodoProvider: React.FC<Props> = ({ children }) => {
         renameTodo,
         filter,
         setFilter,
+        errorMessage,
+        setErrorMessage,
       }}
     >
       {children}
@@ -115,7 +120,7 @@ export const useTodos = () => {
   const context = useContext(TodoContext);
 
   if (!context) {
-    throw new Error('useTodos має використовуватися всередині TodoProvider');
+    throw new Error('useTodos should be used within TodoProvider');
   }
 
   return context;

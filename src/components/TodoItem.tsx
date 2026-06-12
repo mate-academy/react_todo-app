@@ -14,7 +14,7 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
   const [newTitle, setNewTitle] = useState(todo.title);
 
   const inputRef = useRef<HTMLInputElement>(null);
-  // Відновлюємо загублений ref для скасування!
+
   const isCanceling = useRef(false);
 
   useEffect(() => {
@@ -28,7 +28,6 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
       event.preventDefault();
     }
 
-    // Якщо ми натиснули Escape, перериваємо збереження
     if (isCanceling.current) {
       isCanceling.current = false;
 
@@ -51,7 +50,6 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
       data-cy="Todo"
       className={`todo ${todo.completed ? 'completed' : ''} ${isEditing ? 'editing' : ''}`}
     >
-      {/* Чекбокс на місці, щоб тести його знаходили */}
       <label
         className="todo__status-label"
         style={isEditing ? { opacity: 0, pointerEvents: 'none' } : {}}

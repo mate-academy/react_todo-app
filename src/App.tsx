@@ -2,12 +2,11 @@ import React from 'react';
 import { TodoHeader } from './components/TodoHeader';
 import { TodoList } from './components/TodoList';
 import { TodoFooter } from './components/TodoFooter';
-import { useTodos } from './context/TodoContext'; // <--- Імпортуємо хук
+import { useTodos } from './context/TodoContext';
 
 export const App: React.FC = () => {
-  const { todos } = useTodos(); // Дістаємо справи з Контексту
+  const { todos, errorMessage, setErrorMessage } = useTodos();
 
-  // Перевіряємо, чи є хоча б одна справа
   const hasTodos = todos.length > 0;
 
   return (
@@ -17,7 +16,6 @@ export const App: React.FC = () => {
       <div className="todoapp__content">
         <TodoHeader />
 
-        {/* Малюємо список і футер ТІЛЬКИ якщо є справи */}
         {hasTodos && (
           <>
             <TodoList />
@@ -25,6 +23,21 @@ export const App: React.FC = () => {
           </>
         )}
       </div>
+
+      {errorMessage && (
+        <div
+          data-cy="ErrorNotification"
+          className="notification is-danger is-light has-text-weight-normal"
+        >
+          <button
+            data-cy="HideErrorButton"
+            type="button"
+            className="delete"
+            onClick={() => setErrorMessage('')}
+          />
+          {errorMessage}
+        </div>
+      )}
     </div>
   );
 };

@@ -3,7 +3,7 @@ import { useTodos } from '../context/TodoContext';
 
 export const TodoHeader: React.FC = () => {
   const [title, setTitle] = React.useState('');
-  const { todos, addTodo, toggleAll } = useTodos();
+  const { todos, addTodo, toggleAll, setErrorMessage } = useTodos();
   const inputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
@@ -17,7 +17,11 @@ export const TodoHeader: React.FC = () => {
 
   const handleSubmit = (event: React.FormEvent) => {
     event.preventDefault();
+
     if (!title.trim()) {
+      setErrorMessage('Title should not be empty');
+      setTimeout(() => setErrorMessage(''), 3000);
+
       return;
     }
 
