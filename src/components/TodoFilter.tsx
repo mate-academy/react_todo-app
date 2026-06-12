@@ -5,33 +5,34 @@ type Props = {
   onChange: (filter: FilterType) => void;
 };
 
+const FILTERS = [
+  { type: 'all', label: 'All', href: '#/', dataCy: 'FilterLinkAll' },
+  {
+    type: 'active',
+    label: 'Active',
+    href: '#/active',
+    dataCy: 'FilterLinkActive',
+  },
+  {
+    type: 'completed',
+    label: 'Completed',
+    href: '#/completed',
+    dataCy: 'FilterLinkCompleted',
+  },
+] as const;
+
 export const TodoFilter = ({ filter, onChange }: Props) => (
   <nav className="filter" data-cy="Filter">
-    <a
-      href="#/"
-      className={`filter__link ${filter === 'all' ? 'selected' : ''}`}
-      data-cy="FilterLinkAll"
-      onClick={() => onChange('all')}
-    >
-      All
-    </a>
-
-    <a
-      href="#/active"
-      className={`filter__link ${filter === 'active' ? 'selected' : ''}`}
-      data-cy="FilterLinkActive"
-      onClick={() => onChange('active')}
-    >
-      Active
-    </a>
-
-    <a
-      href="#/completed"
-      className={`filter__link ${filter === 'completed' ? 'selected' : ''}`}
-      data-cy="FilterLinkCompleted"
-      onClick={() => onChange('completed')}
-    >
-      Completed
-    </a>
+    {FILTERS.map(({ type, label, href, dataCy }) => (
+      <a
+        key={type}
+        href={href}
+        className={`filter__link ${filter === type ? 'selected' : ''}`}
+        data-cy={dataCy}
+        onClick={() => onChange(type)}
+      >
+        {label}
+      </a>
+    ))}
   </nav>
 );

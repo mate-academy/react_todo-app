@@ -26,6 +26,11 @@ export const TodoItem = ({ todo }: { todo: Todo }) => {
     }
   };
 
+  const handleFormSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    handleSubmit();
+  };
+
   return (
     <div
       data-cy="Todo"
@@ -44,12 +49,7 @@ export const TodoItem = ({ todo }: { todo: Todo }) => {
       </label>
 
       {editing ? (
-        <form
-          onSubmit={e => {
-            e.preventDefault();
-            handleSubmit();
-          }}
-        >
+        <form onSubmit={handleFormSubmit}>
           <input
             ref={inputRef}
             data-cy="TodoTitleField"

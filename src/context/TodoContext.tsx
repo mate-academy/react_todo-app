@@ -24,19 +24,19 @@ export const useTodos = () => useContext(TodoContext);
 
 export const TodoProvider = ({ children }: { children: React.ReactNode }) => {
   const [todos, setTodos] = useState<Todo[]>(() => {
-    const saved = localStorage.getItem('todos');
+    try {
+      const saved = localStorage.getItem('todos');
 
-    return saved ? JSON.parse(saved) : [];
+      return saved ? JSON.parse(saved) : [];
+    } catch {
+      return [];
+    }
   });
 
   const inputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
-    if (todos.length > 0) {
-      localStorage.setItem('todos', JSON.stringify(todos));
-    } else {
-      localStorage.removeItem('todos');
-    }
+    localStorage.setItem('todos', JSON.stringify(todos));
   }, [todos]);
 
   const addTodo = (title: string) => {
