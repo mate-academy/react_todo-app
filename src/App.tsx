@@ -24,20 +24,36 @@ export const App: React.FC = () => {
         )}
       </div>
 
-      {errorMessage && (
-        <div
-          data-cy="ErrorNotification"
-          className="notification is-danger is-light has-text-weight-normal"
+      <div
+        data-cy="ErrorNotification"
+        className={`notification ${errorMessage ? '' : 'hidden'}`}
+        style={{
+          position: 'relative',
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+        }}
+      >
+        <button
+          data-cy="HideErrorButton"
+          type="button"
+          className="delete"
+          onClick={() => setErrorMessage('')}
+          style={{
+            position: 'absolute',
+            right: '15px',
+            background: 'none',
+            border: 'none',
+            cursor: 'pointer',
+            fontSize: '16px',
+            color: 'inherit',
+          }}
         >
-          <button
-            data-cy="HideErrorButton"
-            type="button"
-            className="delete"
-            onClick={() => setErrorMessage('')}
-          />
-          {errorMessage}
-        </div>
-      )}
+          ✖
+        </button>
+
+        {errorMessage}
+      </div>
     </div>
   );
 };
