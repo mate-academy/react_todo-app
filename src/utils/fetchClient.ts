@@ -35,7 +35,9 @@ function request<T, D = unknown>(
 
 export const client = {
   get: <T>(url: string) => request<T>(url),
-  post: <T, D = unknown>(url: string, data?: D) => request<T, D>(url, 'POST', data),
-  patch: <T, D = unknown>(url: string, data?: D) => request<T, D>(url, 'PATCH', data),
-  delete: <T = any>(url: string) => request<T>(url, 'DELETE'),
+  post: <T, D = unknown>(url: string, data?: D) =>
+    request<T, D>(url, 'POST', data),
+  patch: <T, D = unknown>(url: string, data?: D) =>
+    request<T, D>(url, 'PATCH', data),
+  delete: <T>(url: string) => request<T>(url, 'DELETE'),
 };
