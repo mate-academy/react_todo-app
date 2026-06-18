@@ -20,6 +20,12 @@ body {
   pointer-events: none;
 }
 
+input:focus,
+.todo__input:focus,
+.todoapp__new-todo:focus {
+  outline: none;
+}
+
 @import './todoapp';
 @import './todo-list';
 @import './filters';
