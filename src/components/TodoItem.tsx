@@ -49,7 +49,7 @@ export const TodoItem: React.FC<{ todo: Todo }> = ({ todo }) => {
         editing: isEditing,
       })}
     >
-      <div className="todo__status-label">
+      <label className="todo__status-label">
         <input
           aria-label={`Toggle ${todo.title}`}
           data-cy="TodoStatus"
@@ -58,7 +58,7 @@ export const TodoItem: React.FC<{ todo: Todo }> = ({ todo }) => {
           checked={todo.completed}
           onChange={() => updateTodo({ ...todo, completed: !todo.completed })}
         />
-      </div>
+      </label>
 
       {isEditing ? (
         <form onSubmit={handleSubmit}>
