@@ -39,6 +39,7 @@ export const App: React.FC = () => {
 
   const handleSubmit = (event?: React.FormEvent<HTMLFormElement>) => {
     event?.preventDefault();
+
     const trimmedTitle = newTodoTitle.trim();
 
     if (trimmedTitle.length > 0) {

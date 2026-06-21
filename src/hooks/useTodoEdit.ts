@@ -8,9 +8,11 @@ export const useTodoEdit = (todo: Todo) => {
   const [newTodoTitle, setNewTodoTitle] = useState(todo.title);
 
   const handleSave = () => {
-    setNewTodoTitle(newTodoTitle.trim());
+    const trimmedTitle = newTodoTitle.trim();
 
-    if (newTodoTitle.length === 0) {
+    setNewTodoTitle(trimmedTitle);
+
+    if (trimmedTitle.length === 0) {
       setIsEditing(false);
 
       dispatch({ type: 'DELETE_TODO', payload: { id: todo.id } });
