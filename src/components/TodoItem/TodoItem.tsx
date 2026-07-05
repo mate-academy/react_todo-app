@@ -3,6 +3,7 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
 
 import React, { useContext, useEffect, useRef, useState } from 'react';
+import classNames from 'classnames';
 import { TodoContext } from '../../context/TodoContext';
 import { Todo } from '../../types/Todo';
 
@@ -43,14 +44,14 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
 
   const handleToggle = () => {
     setTodos(
-      todos.map(item =>
+      todos.map(item => (
         item.id === todo.id
           ? {
               ...item,
               completed: !item.completed,
             }
-          : item,
-      ),
+          : item
+      )),
     );
   };
 
@@ -64,14 +65,14 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
     }
 
     setTodos(
-      todos.map(item =>
+      todos.map(item => (
         item.id === todo.id
           ? {
               ...item,
               title: trimmedTitle,
             }
-          : item,
-      ),
+          : item
+      )),
     );
 
     setIsEditing(false);
@@ -79,7 +80,7 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
 
   const handleKeyDown = (
     event: React.KeyboardEvent<HTMLInputElement>,
-  ) => {
+   ) => {
     if (event.key === 'Enter') {
       handleSave();
     }
@@ -93,9 +94,10 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
   return (
     <div
       data-cy="Todo"
-      className={`${todo.completed ? 'todo completed' : 'todo'} ${
-        isEditing ? 'editing' : ''
-      }`}
+      className={classNames('todo', {
+        completed: todo.completed,
+        editing: isEditing,
+      })}
     >
       <label className="todo__status-label">
         <input

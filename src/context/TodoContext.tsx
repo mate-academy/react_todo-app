@@ -1,5 +1,5 @@
 import React, { createContext } from 'react';
-import { Filter } from '../types/Filter';
+import { Filter, FILTERS } from '../types/Filter';
 import { Todo } from '../types/Todo';
 
 type TodoContextType = {
@@ -12,6 +12,6 @@ type TodoContextType = {
 export const TodoContext = createContext<TodoContextType>({
   todos: [],
   setTodos: () => {},
-  filter: 'All',
+  filter: FILTERS.all,
   setFilter: () => {},
 });

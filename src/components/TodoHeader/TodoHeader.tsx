@@ -1,5 +1,6 @@
 /* eslint-disable prettier/prettier */
 import React, { useContext, useRef, useState } from 'react';
+import classNames from 'classnames';
 import { TodoContext } from '../../context/TodoContext';
 
 export const TodoHeader: React.FC = () => {
@@ -51,11 +52,9 @@ export const TodoHeader: React.FC = () => {
         <button
           type="button"
           data-cy="ToggleAllButton"
-          className={
-            todos.length > 0 && todos.every(todo => todo.completed)
-              ? 'todoapp__toggle-all active'
-              : 'todoapp__toggle-all'
-          }
+          className={classNames('todoapp__toggle-all', {
+            active: todos.every(todo => todo.completed),
+          })}
           onClick={handleToggleAll}
         />
       )}

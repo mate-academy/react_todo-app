@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Filter } from '../types/Filter';
+import { Filter, FILTERS } from '../types/Filter';
 import { Todo } from '../types/Todo';
 import { TodoContext } from './TodoContext';
 
@@ -14,7 +14,7 @@ export const TodoProvider: React.FC<Props> = ({ children }) => {
     return savedTodos ? JSON.parse(savedTodos) : [];
   });
 
-  const [filter, setFilter] = useState<Filter>('All');
+  const [filter, setFilter] = useState<Filter>(FILTERS.all);
 
   useEffect(() => {
     localStorage.setItem('todos', JSON.stringify(todos));

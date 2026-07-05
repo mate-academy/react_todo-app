@@ -2,16 +2,17 @@
 import React, { useContext } from 'react';
 import { TodoContext } from '../../context/TodoContext';
 import { TodoItem } from '../TodoItem';
+import { FILTERS } from '../../types/Filter';
 
 export const TodoList: React.FC = () => {
   const { todos, filter } = useContext(TodoContext);
 
   const visibleTodos = todos.filter(todo => {
     switch (filter) {
-      case 'Active':
+      case FILTERS.active:
         return !todo.completed;
 
-      case 'Completed':
+      case FILTERS.completed:
         return todo.completed;
 
       default:
@@ -20,15 +21,9 @@ export const TodoList: React.FC = () => {
   });
 
   return (
-    <section
-      className="todoapp__main"
-      data-cy="TodoList"
-    >
+    <section className="todoapp__main" data-cy="TodoList">
       {visibleTodos.map(todo => (
-        <TodoItem
-          key={todo.id}
-          todo={todo}
-        />
+        <TodoItem key={todo.id} todo={todo} />
       ))}
     </section>
   );
