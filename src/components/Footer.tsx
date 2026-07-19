@@ -1,38 +1,54 @@
 import { useTodo } from '../context/TodoContext';
+import cn from 'classnames';
 
 export const Footer: React.FC = () => {
-  const { dispatch } = useTodo();
+  const { state, dispatch } = useTodo();
+
+  const countActiveTodos = state.todos.filter(todo => !todo.completed).length;
+  const hasCompletedTodo = state.todos.some(todo => todo.completed);
 
   return (
     <footer className="todoapp__footer" data-cy="Footer">
       <span className="todo-count" data-cy="TodosCounter">
-        3 items left
+        {`${countActiveTodos} items left`}
       </span>
 
-      {/* Active link should have the 'selected' class */}
       <nav className="filter" data-cy="Filter">
-        <a href="#/" className="filter__link selected" data-cy="FilterLinkAll">
+        <a
+          href="#/"
+          className={cn('filter__link', { selected: state.filter === 'all' })}
+          data-cy="FilterLinkAll"
+        >
           All
         </a>
 
-        <a href="#/active" className="filter__link" data-cy="FilterLinkActive">
+        <a
+          href="#/active"
+          className={cn('filter__link', {
+            selected: state.filter === 'active',
+          })}
+          data-cy="FilterLinkActive"
+        >
           Active
         </a>
 
         <a
           href="#/completed"
-          className="filter__link"
+          className={cn('filter__link', {
+            selected: state.filter === 'completed',
+          })}
           data-cy="FilterLinkCompleted"
         >
           Completed
         </a>
       </nav>
 
-      {/* this button should be disabled if there are no completed todos */}
       <button
         type="button"
         className="todoapp__clear-completed"
         data-cy="ClearCompletedButton"
+        disabled={!hasCompletedTodo}
+        onClick={() => dispatch({ type: 'CLEAR_COMPLETED' })}
       >
         Clear completed
       </button>

@@ -8,7 +8,7 @@ export interface TodoState {
 }
 
 export const initialTodoState: TodoState = {
-  todos: JSON.parse(localStorage.getItem('todo') || '[]'),
+  todos: JSON.parse(localStorage.getItem('todos') || '[]'),
   filter: 'all',
 };
 
@@ -114,8 +114,27 @@ export const TodoProvider = ({ children }: { children: React.ReactNode }) => {
   const [state, dispatch] = useReducer(todoReducer, initialTodoState);
 
   useEffect(() => {
-    localStorage.setItem('todo', JSON.stringify(state.todos));
+    localStorage.setItem('todos', JSON.stringify(state.todos));
   }, [state.todos]);
+
+  useEffect(() => {
+    const handleHashChange = () => {
+      const hash = window.location.hash;
+      const endHashStr = hash.replace('#/', '') as FilterTypes;
+
+      if (endHashStr === 'active' || endHashStr === 'completed') {
+        dispatch({ type: 'SET_FILTER', payload: endHashStr });
+      } else {
+        dispatch({ type: 'SET_FILTER', payload: 'all' });
+      }
+    };
+
+    window.addEventListener('hashchange', handleHashChange);
+
+    return () => {
+      window.removeEventListener('hashchange', handleHashChange);
+    };
+  }, []);
 
   return (
     <TodoContext.Provider value={{ state, dispatch }}>
