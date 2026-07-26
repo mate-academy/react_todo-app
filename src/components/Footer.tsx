@@ -6,6 +6,19 @@ export const Footer = () => {
 
   const uncompletedTodos = todos.filter(todo => !todo.completed);
   const hasCompletedTodos = todos.some(todo => todo.completed);
+  const filters = ['All', 'Active', 'Completed'];
+
+  const handleClearCompleted = () => {
+    clearCompleted();
+
+    const newTodoField = document.querySelector(
+      '[data-cy="NewTodoField"]',
+    ) as HTMLInputElement;
+
+    if (newTodoField) {
+      newTodoField.focus();
+    }
+  };
 
   return (
     <footer className="todoapp__footer" data-cy="Footer">
@@ -14,49 +27,29 @@ export const Footer = () => {
       </span>
 
       <nav className="filter" data-cy="Filter">
-        <a
-          href="#/"
-          className={`filter__link ${filter === 'All' ? 'selected' : ''}`}
-          data-cy="FilterLinkAll"
-          onClick={() => setFilter('All')}
-        >
-          All
-        </a>
+        {filters.map(filterName => {
+          const href =
+            filterName === 'All' ? '#/' : `#/${filterName.toLowerCase()}`;
 
-        <a
-          href="#/active"
-          className={`filter__link ${filter === 'Active' ? 'selected' : ''}`}
-          data-cy="FilterLinkActive"
-          onClick={() => setFilter('Active')}
-        >
-          Active
-        </a>
-
-        <a
-          href="#/completed"
-          className={`filter__link ${filter === 'Completed' ? 'selected' : ''}`}
-          data-cy="FilterLinkCompleted"
-          onClick={() => setFilter('Completed')}
-        >
-          Completed
-        </a>
+          return (
+            <a
+              key={filterName}
+              href={href}
+              className={`filter__link ${filter === filterName ? 'selected' : ''}`}
+              data-cy={`FilterLink${filterName}`}
+              onClick={() => setFilter(filterName)}
+            >
+              {filterName}
+            </a>
+          );
+        })}
       </nav>
 
       <button
         type="button"
         className="todoapp__clear-completed"
         data-cy="ClearCompletedButton"
-        onClick={() => {
-          clearCompleted();
-
-          const newTodoField = document.querySelector(
-            '[data-cy="NewTodoField"]',
-          ) as HTMLInputElement;
-
-          if (newTodoField) {
-            newTodoField.focus();
-          }
-        }}
+        onClick={handleClearCompleted}
         disabled={!hasCompletedTodos}
       >
         Clear completed

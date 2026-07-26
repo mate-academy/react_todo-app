@@ -6,15 +6,15 @@ export const TodoList = () => {
   const { todos, filter } = useContext(TodosContext);
 
   const visibleTodos = todos.filter(todo => {
-    if (filter === 'Active') {
-      return !todo.completed;
+    switch (filter) {
+      case 'Active':
+        return !todo.completed;
+      case 'Completed':
+        return todo.completed;
+      case 'All':
+      default:
+        return true;
     }
-
-    if (filter === 'Completed') {
-      return todo.completed;
-    }
-
-    return true;
   });
 
   return (

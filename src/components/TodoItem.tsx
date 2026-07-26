@@ -11,23 +11,47 @@ export const TodoItem = ({ todo }: Props) => {
   const [editText, setEditText] = useState(todo.title);
   const { deleteTodo, toggleTodo, renameTodo } = useContext(TodosContext);
 
+  const itemClass =
+    `todo ${todo.completed ? 'completed' : ''} ${isEditing ? 'editing' : ''}`.trim();
+
   const handleSave = () => {
     const normalizedTitle = editText.trim();
 
     if (normalizedTitle === '') {
       deleteTodo(todo.id);
-    } else if (normalizedTitle !== todo.title) {
+      setIsEditing(false);
+
+      return;
+    }
+
+    if (normalizedTitle !== todo.title) {
       renameTodo(todo.id, normalizedTitle);
     }
 
     setIsEditing(false);
   };
 
+  const handleKeyUp = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    if (event.key === 'Escape') {
+      setEditText(todo.title);
+      setIsEditing(false);
+    }
+  };
+
+  const handleDelete = () => {
+    deleteTodo(todo.id);
+
+    const newTodoField = document.querySelector(
+      '[data-cy="NewTodoField"]',
+    ) as HTMLInputElement;
+
+    if (newTodoField) {
+      newTodoField.focus();
+    }
+  };
+
   return (
-    <div
-      data-cy="Todo"
-      className={`todo ${todo.completed ? 'completed' : ''} ${isEditing ? 'editing' : ''}`}
-    >
+    <div data-cy="Todo" className={itemClass}>
       <label className="todo__status-label">
         <input
           data-cy="TodoStatus"
@@ -54,12 +78,7 @@ export const TodoItem = ({ todo }: Props) => {
             value={editText}
             onChange={event => setEditText(event.target.value)}
             onBlur={handleSave}
-            onKeyUp={event => {
-              if (event.key === 'Escape') {
-                setEditText(todo.title);
-                setIsEditing(false);
-              }
-            }}
+            onKeyUp={handleKeyUp}
           />
         </form>
       ) : (
@@ -76,17 +95,7 @@ export const TodoItem = ({ todo }: Props) => {
             type="button"
             className="todo__remove"
             data-cy="TodoDelete"
-            onClick={() => {
-              deleteTodo(todo.id);
-
-              const newTodoField = document.querySelector(
-                '[data-cy="NewTodoField"]',
-              ) as HTMLInputElement;
-
-              if (newTodoField) {
-                newTodoField.focus();
-              }
-            }}
+            onClick={handleDelete}
           >
             ×
           </button>
