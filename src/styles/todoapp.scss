@@ -18,6 +18,7 @@
     font-weight: 100;
     text-align: center;
     color: rgba(175, 47, 47, 0.15);
+    color: #FCFCFC;
     -webkit-text-rendering: optimizeLegibility;
     -moz-text-rendering: optimizeLegibility;
     text-rendering: optimizeLegibility;
@@ -56,8 +57,10 @@
   }
 
   &__new-todo {
+    box-sizing: border-box;
     width: 100%;
     padding: 16px 16px 16px 60px;
+    outline: none;
 
     font-size: 24px;
     line-height: 1.4em;
