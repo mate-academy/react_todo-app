@@ -1,60 +1,26 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
-import React, { useState, useRef, useEffect } from 'react';
-import { useTodos } from './context/TodosContext';
+import React from 'react';
 import classNames from 'classnames';
 import { TodoItem } from './components/TodoItem';
-
-type FilteredStatus = 'all' | 'active' | 'completed';
+import { useTodo } from './hooks/useTodo';
 
 export const App: React.FC = () => {
-  const { todos, dispatch } = useTodos();
-  const [title, setTitle] = useState('');
-  const [filter, setFilter] = useState<FilteredStatus>('all');
-
-  const newTodoInputRef = useRef<HTMLInputElement>(null);
-
-  useEffect(() => {
-    newTodoInputRef.current?.focus();
-  }, []);
-
-  const handleSubmit = (event: React.FormEvent) => {
-    event.preventDefault();
-
-    const trimmedTitle = title.trim();
-
-    if (!trimmedTitle) {
-      return;
-    }
-
-    dispatch({ type: 'ADD', payload: trimmedTitle });
-
-    setTitle('');
-  };
-
-  const handleDeleteTodo = (todoId: number) => {
-    dispatch({ type: 'DELETE', payload: todoId });
-    newTodoInputRef.current?.focus();
-  };
-
-  const hasCompletedTodos = todos.some(t => t.completed);
-
-  const activeTodosCount = todos.filter(t => !t.completed).length;
-
-  const focusNewTodoInput = () => {
-    newTodoInputRef.current?.focus();
-  };
-
-  const visibleTodos = todos.filter(todo => {
-    switch (filter) {
-      case 'active':
-        return !todo.completed;
-      case 'completed':
-        return todo.completed;
-
-      default:
-        return true;
-    }
-  });
+  const {
+    todos,
+    visibleTodos,
+    title,
+    setTitle,
+    filter,
+    setFilter,
+    newTodoInputRef,
+    handleSubmit,
+    handleDeleteTodo,
+    handleToggleAll,
+    handleClearCompleted,
+    hasCompletedTodos,
+    activeTodosCount,
+    focusNewTodoInput,
+  } = useTodo();
 
   return (
     <div className="todoapp">
@@ -70,14 +36,7 @@ export const App: React.FC = () => {
                 active: todos.every(todo => todo.completed),
               })}
               data-cy="ToggleAllButton"
-              onClick={() => {
-                const areAllCompleted = todos.every(t => t.completed);
-
-                dispatch({
-                  type: 'TOGGLE_ALL',
-                  payload: !areAllCompleted,
-                });
-              }}
+              onClick={handleToggleAll}
             />
           )}
           {/* Add a todo on form submit */}
@@ -155,10 +114,7 @@ export const App: React.FC = () => {
                 className="todoapp__clear-completed"
                 data-cy="ClearCompletedButton"
                 disabled={!hasCompletedTodos}
-                onClick={() => {
-                  dispatch({ type: 'CLEAR' });
-                  newTodoInputRef.current?.focus();
-                }}
+                onClick={handleClearCompleted}
               >
                 Clear completed
               </button>

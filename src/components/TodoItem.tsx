@@ -1,7 +1,8 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React from 'react';
 import classNames from 'classnames';
 import { Todo } from '../types/Todo';
 import { useTodos } from '../context/TodosContext';
+import { useTodoItem } from '../hooks/useTodoItem';
 
 type Props = {
   todo: Todo;
@@ -15,71 +16,15 @@ export const TodoItem: React.FC<Props> = ({
   onFocusNewTodo,
 }) => {
   const { dispatch } = useTodos();
-  const [isEditing, setIsEditing] = useState(false);
-  const [editingTitle, setEditingTitle] = useState(todo.title);
-
-  const isCancelledRef = useRef(false);
-
-  const handleSave = (event?: React.FormEvent) => {
-    if (event) {
-      event.preventDefault();
-    }
-
-    if (isCancelledRef.current || !isEditing) {
-      return;
-    }
-
-    setIsEditing(false);
-
-    const trimmedTitle = editingTitle.trim();
-
-    if (!trimmedTitle) {
-      onDelete(todo.id);
-
-      return;
-    }
-
-    if (trimmedTitle !== todo.title) {
-      dispatch({
-        type: 'RENAME',
-        payload: { id: todo.id, title: trimmedTitle },
-      });
-    }
-
-    onFocusNewTodo?.();
-  };
-
-  const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
-    if (event.key === 'Escape') {
-      isCancelledRef.current = true;
-      setEditingTitle(todo.title);
-
-      setIsEditing(false);
-      onFocusNewTodo?.();
-    }
-  };
-
-  const handleBlur = () => {
-    if (!isEditing) {
-      return;
-    }
-
-    if (isEditing && editingTitle !== todo.title) {
-      handleSave();
-    } else {
-      setIsEditing(false);
-    }
-  };
-
-  const handleDoubleClick = () => {
-    setIsEditing(true);
-    setEditingTitle(todo.title);
-    isCancelledRef.current = false;
-  };
-
-  useEffect(() => {
-    setEditingTitle(todo.title);
-  }, [todo.title]);
+  const {
+    isEditing,
+    editingTitle,
+    setEditingTitle,
+    handleSave,
+    handleKeyUp,
+    handleBlur,
+    handleDoubleClick,
+  } = useTodoItem({ todo, onDelete, onFocusNewTodo });
 
   return (
     <div
@@ -128,7 +73,7 @@ export const TodoItem: React.FC<Props> = ({
             value={editingTitle}
             onChange={e => setEditingTitle(e.target.value)}
             onBlur={handleBlur}
-            onKeyDown={handleKeyDown}
+            onKeyDown={handleKeyUp}
             autoFocus
           />
         </form>
