@@ -62,18 +62,6 @@ export const useTodoItem = ({ todo, onDelete, onFocusNewTodo }: Props) => {
     handleSave();
   };
 
-  // const handleBlur = () => {
-  //   if (!isEditing) {
-  //     return;
-  //   }
-
-  //   if (isEditing && editingTitle !== todo.title) {
-  //     handleSave();
-  //   } else {
-  //     setIsEditing(false);
-  //   }
-  // };
-
   const handleDoubleClick = () => {
     setIsEditing(true);
     setEditingTitle(todo.title);

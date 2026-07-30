@@ -73,7 +73,7 @@ export const TodoItem: React.FC<Props> = ({
             value={editingTitle}
             onChange={e => setEditingTitle(e.target.value)}
             onBlur={handleBlur}
-            onKeyDown={handleKeyUp}
+            onKeyUp={handleKeyUp}
             autoFocus
           />
         </form>

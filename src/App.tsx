@@ -3,6 +3,7 @@ import React from 'react';
 import classNames from 'classnames';
 import { TodoItem } from './components/TodoItem';
 import { useTodo } from './hooks/useTodo';
+import { Footer } from './components/Footer';
 
 export const App: React.FC = () => {
   const {
@@ -67,58 +68,13 @@ export const App: React.FC = () => {
               ))}
             </section>
 
-            {/* Hide the footer if there are no todos */}
-            <footer className="todoapp__footer" data-cy="Footer">
-              <span className="todo-count" data-cy="TodosCounter">
-                {activeTodosCount} items left
-              </span>
-
-              {/* Active link should have the 'selected' class */}
-              <nav className="filter" data-cy="Filter">
-                <a
-                  href="#/"
-                  className={classNames('filter__link', {
-                    selected: filter === 'all',
-                  })}
-                  data-cy="FilterLinkAll"
-                  onClick={() => setFilter('all')}
-                >
-                  All
-                </a>
-
-                <a
-                  href="#/active"
-                  className={classNames('filter__link', {
-                    selected: filter === 'active',
-                  })}
-                  data-cy="FilterLinkActive"
-                  onClick={() => setFilter('active')}
-                >
-                  Active
-                </a>
-
-                <a
-                  href="#/completed"
-                  className={classNames('filter__link', {
-                    selected: filter === 'completed',
-                  })}
-                  data-cy="FilterLinkCompleted"
-                  onClick={() => setFilter('completed')}
-                >
-                  Completed
-                </a>
-              </nav>
-
-              <button
-                type="button"
-                className="todoapp__clear-completed"
-                data-cy="ClearCompletedButton"
-                disabled={!hasCompletedTodos}
-                onClick={handleClearCompleted}
-              >
-                Clear completed
-              </button>
-            </footer>
+            <Footer
+              activeTodosCount={activeTodosCount}
+              filter={filter}
+              setFilter={setFilter}
+              handleClearCompleted={handleClearCompleted}
+              hasCompletedTodos={hasCompletedTodos}
+            />
           </>
         )}
       </div>
