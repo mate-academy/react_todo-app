@@ -2,17 +2,18 @@ import React, { useContext, useState } from 'react';
 import { Context } from './Context';
 import { Header } from './components/Header';
 import { TodoList } from './components/TodoList';
-import { FilterStatus, Footer } from './components/Footer';
+import { Footer } from './components/Footer';
+import { FilterStatus } from './types/FilterStatus';
 
 export const App: React.FC = () => {
   const { todos } = useContext(Context);
-  const [filter, setFilter] = useState<FilterStatus>('all');
+  const [filter, setFilter] = useState<FilterStatus>(FilterStatus.All);
 
   const filteredTodos = todos.filter(todo => {
     switch (filter) {
-      case 'active':
+      case FilterStatus.Active:
         return !todo.completed;
-      case 'completed':
+      case FilterStatus.Completed:
         return todo.completed;
       default:
         return true;

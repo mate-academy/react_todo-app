@@ -50,6 +50,21 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
     setEditingTitle(todo.title);
   };
 
+  const handleToggle = () => {
+    toggleTodo(todo.id);
+    focusInput();
+  };
+
+  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    handleSave();
+  };
+
+  const handleDelete = () => {
+    deleteTodo(todo.id);
+    focusInput();
+  };
+
   return (
     <div
       data-cy="Todo"
@@ -64,20 +79,12 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
           type="checkbox"
           className="todo__status"
           checked={todo.completed}
-          onChange={() => {
-            toggleTodo(todo.id);
-            focusInput();
-          }}
+          onChange={handleToggle}
         />
       </label>
 
       {isEditing ? (
-        <form
-          onSubmit={event => {
-            event.preventDefault();
-            handleSave();
-          }}
-        >
+        <form onSubmit={handleSubmit}>
           <input
             data-cy="TodoTitleField"
             className="todo__title-field"
@@ -104,10 +111,7 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
             type="button"
             className="todo__remove"
             data-cy="TodoDelete"
-            onClick={() => {
-              deleteTodo(todo.id);
-              focusInput();
-            }}
+            onClick={handleDelete}
           >
             ×
           </button>
