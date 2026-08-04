@@ -1,21 +1,29 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
 import React, { useState } from 'react';
-import { Todo } from './types/todo';
 import { TodoProvider, useTodo } from './context/TodoContext';
 import { TodoItem } from './components/TodoItem';
+import { TodoForm } from './components/TodoForm';
+import { Footer } from './components/Footer';
 
 // компонент, який зможе користуватися контекстом
 const TodoApp: React.FC = () => {
-  const { todos } = useTodo();
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const { todos, addTodo, clearCompleted, toggleAll } = useTodo();
   const [filter, setFilter] = useState<'all' | 'active' | 'completed'>('all');
 
-  const filterFns = {
-    all: () => true,
-    active: (todo: Todo) => !todo.completed,
-    completed: (todo: Todo) => todo.completed,
+  const getVisibleTodos = () => {
+    switch (filter) {
+      case 'active':
+        return todos.filter(todo => !todo.completed);
+      case 'completed':
+        return todos.filter(todo => todo.completed);
+      case 'all':
+      default:
+        return todos;
+    }
   };
 
-  const visibleTodos = todos.filter(filterFns[filter]);
+  const visibleTodos = getVisibleTodos();
 
   return (
     <div className="todoapp">
@@ -23,70 +31,30 @@ const TodoApp: React.FC = () => {
 
       <div className="todoapp__content">
         <header className="todoapp__header">
-          {filter === 'all' && (
+          {todos.length > 0 && (
             <button
               type="button"
-              className="todoapp__toggle-all active"
+              /* клас 'active', якщо todos не порожні і кожен todo виконаний */
+              className={`todoapp__toggle-all ${
+                todos.length > 0 && todos.every(todo => todo.completed)
+                  ? 'active'
+                  : ''
+              }`}
               data-cy="ToggleAllButton"
+              onClick={toggleAll}
             />
           )}
 
-          <form>
-            <input
-              data-cy="NewTodoField"
-              type="text"
-              className="todoapp__new-todo"
-              placeholder="What needs to be done?"
-            />
-          </form>
+          <TodoForm addTodo={addTodo} />
         </header>
-
-        <section className="todoapp__main" data-cy="TodoList">
-          {visibleTodos.map(todo => (
-            <TodoItem key={todo.id} todo={todo} />
-          ))}
-        </section>
-
-        <footer className="todoapp__footer" data-cy="Footer">
-          <span className="todo-count" data-cy="TodosCounter">
-            {visibleTodos.length} items left
-          </span>
-
-          <nav className="filter" data-cy="Filter">
-            <a
-              href="#/"
-              className={`filter__link ${filter === 'all' ? 'selected' : ''}`}
-              onClick={() => setFilter('all')}
-              data-cy="FilterLinkAll"
-            >
-              All
-            </a>
-
-            <a
-              href="#/active"
-              className="filter__link"
-              data-cy="FilterLinkActive"
-            >
-              Active
-            </a>
-
-            <a
-              href="#/completed"
-              className="filter__link"
-              data-cy="FilterLinkCompleted"
-            >
-              Completed
-            </a>
-          </nav>
-
-          <button
-            type="button"
-            className="todoapp__clear-completed"
-            data-cy="ClearCompletedButton"
-          >
-            Clear completed
-          </button>
-        </footer>
+        {todos.length > 0 && (
+          <section className="todoapp__main" data-cy="TodoList">
+            {visibleTodos.map(todo => (
+              <TodoItem key={todo.id} todo={todo} />
+            ))}
+          </section>
+        )}{' '}
+        {todos.length > 0 && <Footer filter={filter} setFilter={setFilter} />}
       </div>
     </div>
   );
