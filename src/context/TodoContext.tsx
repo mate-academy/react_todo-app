@@ -33,7 +33,7 @@ export const TodoProvider: React.FC<{ children: ReactNode }> = ({
         return JSON.parse(savedTodos);
       } catch (error) {
         // eslint-disable-next-line no-console
-        console.error('Помилка читання з localStorage:', error);
+        console.error('useTodo must be used within a TodoProvider', error);
       }
     }
 

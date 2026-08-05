@@ -30,35 +30,39 @@ export const TodoItem: React.FC<TodoItemProps> = ({ todo }) => {
     setIsEditing(false);
   };
 
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter') {
+      handleSave();
+    } else if (e.key === 'Escape') {
+      setEditText(todo.title);
+      setIsEditing(false);
+    }
+  };
+
   return (
     <div
       data-cy="Todo"
       className={`todo ${todo.completed ? 'completed' : ''} ${isEditing ? 'editing' : ''}`}
     >
-      <input
-        data-cy="TodoStatus"
-        type="checkbox"
-        className="todo__status"
-        checked={todo.completed}
-        onChange={() => toggleTodo(todo.id)}
-      />
-
+      {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
+      <label className="todo__status-label">
+        <input
+          data-cy="TodoStatus"
+          type="checkbox"
+          className="todo__status"
+          checked={todo.completed}
+          onChange={() => toggleTodo(todo.id)}
+        />
+      </label>
       {isEditing ? (
         <input
           type="text"
-          className="todo__input"
+          className="todo__title-field"
           data-cy="TodoTitleField"
           value={editText}
           onChange={e => setEditText(e.target.value)}
           onBlur={handleSave}
-          onKeyDown={e => {
-            if (e.key === 'Enter') {
-              handleSave();
-            } else if (e.key === 'Escape') {
-              setEditText(todo.title);
-              setIsEditing(false);
-            }
-          }}
+          onKeyDown={handleKeyDown}
           autoFocus
         />
       ) : (
@@ -73,7 +77,7 @@ export const TodoItem: React.FC<TodoItemProps> = ({ todo }) => {
           <button
             data-cy="TodoDelete"
             type="button"
-            className="todo__delete"
+            className="todo__remove"
             onClick={() => deleteTodo(todo.id)}
           >
             ×

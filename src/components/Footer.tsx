@@ -1,10 +1,32 @@
 import React from 'react';
 import { useTodo } from '../context/TodoContext';
+import { Filter } from '../types/filter'; // 📌 Імпортуємо винесений тип для фільтрів
 
 interface FooterProps {
-  filter: 'all' | 'active' | 'completed';
-  setFilter: (filter: 'all' | 'active' | 'completed') => void;
+  filter: Filter;
+  setFilter: (filter: Filter) => void;
 }
+
+const filterConfig: {
+  label: string;
+  value: Filter;
+  path: string;
+  dataCy: string;
+}[] = [
+  { label: 'All', value: 'all', path: '#/', dataCy: 'FilterLinkAll' },
+  {
+    label: 'Active',
+    value: 'active',
+    path: '#/active',
+    dataCy: 'FilterLinkActive',
+  },
+  {
+    label: 'Completed',
+    value: 'completed',
+    path: '#/completed',
+    dataCy: 'FilterLinkCompleted',
+  },
+];
 
 export const Footer: React.FC<FooterProps> = ({ filter, setFilter }) => {
   const { todos, clearCompleted } = useTodo();
@@ -16,32 +38,17 @@ export const Footer: React.FC<FooterProps> = ({ filter, setFilter }) => {
       </span>
 
       <nav className="filter" data-cy="Filter">
-        <a
-          href="#/"
-          className={`filter__link ${filter === 'all' ? 'selected' : ''}`}
-          onClick={() => setFilter('all')}
-          data-cy="FilterLinkAll"
-        >
-          All
-        </a>
-
-        <a
-          href="#/active"
-          className={`filter__link ${filter === 'active' ? 'selected' : ''}`}
-          data-cy="FilterLinkActive"
-          onClick={() => setFilter('active')}
-        >
-          Active
-        </a>
-
-        <a
-          href="#/completed"
-          className={`filter__link ${filter === 'completed' ? 'selected' : ''}`}
-          data-cy="FilterLinkCompleted"
-          onClick={() => setFilter('completed')}
-        >
-          Completed
-        </a>
+        {filterConfig.map(({ label, value, path, dataCy }) => (
+          <a
+            key={value}
+            href={path}
+            className={`filter__link ${filter === value ? 'selected' : ''}`}
+            onClick={() => setFilter(value)}
+            data-cy={dataCy}
+          >
+            {label}
+          </a>
+        ))}
       </nav>
 
       <button
