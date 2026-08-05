@@ -1,11 +1,21 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
+import { useTodos } from '../../hooks/useTodos';
 import { Todo } from '../Todo/Todo';
 import './TodoList.scss';
 
 export const TodoList = () => {
+  const todos = useTodos();
+
   return (
     <section className="todo-list" data-cy="TodoList">
-      <Todo />
+      {todos.map(todo => (
+        <Todo
+          key={todo.id}
+          id={todo.id}
+          title={todo.title}
+          completed={todo.completed}
+        />
+      ))}
 
       {/* This is a completed todo
       <div data-cy="Todo" className="todo completed">

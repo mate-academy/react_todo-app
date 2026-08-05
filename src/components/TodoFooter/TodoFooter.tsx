@@ -1,11 +1,16 @@
+import { useTodos } from '../../hooks/useTodos';
 import { TodoFilter } from '../TodoFilter';
 import './TodoFooter.scss';
 
 export const TodoFooter = () => {
+  const todos = useTodos();
+
+  const completedTodosAmount = todos.filter(todo => !todo.completed).length;
+
   return (
     <footer className="todo-footer" data-cy="Footer">
       <span className="todo-footer_count" data-cy="TodosCounter">
-        3 items left
+        {completedTodosAmount} items left
       </span>
 
       {/* Active link should have the 'selected' class */}
