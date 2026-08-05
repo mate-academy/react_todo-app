@@ -1,12 +1,17 @@
 import { useTodos } from '../../hooks/useTodos';
+import { useTodosSetter } from '../../hooks/useTodosSetter';
 import { TodoFilter } from '../TodoFilter';
 import './TodoFooter.scss';
 
 export const TodoFooter = () => {
   const todos = useTodos();
+  const todosSetter = useTodosSetter();
+
   const completedTodosAmount = todos.filter(todo => todo.completed).length;
 
-  const completedTodosAmount = todos.filter(todo => !todo.completed).length;
+  const handleClearCompleted = () => {
+    todosSetter(currentTodos => currentTodos.filter(todo => !todo.completed));
+  };
 
   return (
     <footer className="todo-footer" data-cy="Footer">
@@ -17,11 +22,12 @@ export const TodoFooter = () => {
       {/* Active link should have the 'selected' class */}
       <TodoFilter />
 
-      {/* this button should be disabled if there are no completed todos */}
       <button
         type="button"
         className="todo-footer__clear-completed"
         data-cy="ClearCompletedButton"
+        onClick={handleClearCompleted}
+        disabled={completedTodosAmount === 0}
       >
         Clear completed
       </button>
