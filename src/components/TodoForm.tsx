@@ -1,19 +1,17 @@
 import { useState, useRef, useEffect } from 'react';
 import { useTodo } from '../context/TodoContext';
 
-// додавання нового завдання
+// add new todo
 export const TodoForm = ({ addTodo }: { addTodo: (title: string) => void }) => {
-  // стан для збереження тексту в інпуті
   const [newTodo, setNewTodo] = useState('');
 
-  // створюємо реф для інпуту та отримуємо доступ до списку завдань з контексту
+  // create a ref for the input and get access to the todos list from the context
   const inputRef = useRef<HTMLInputElement>(null);
   const { todos } = useTodo();
 
-  // зберігаємо попередню довжину масиву завдань для відстеження видалення
   const prevTodosLengthRef = useRef(todos.length);
 
-  // ефект для повернення фокуса на інпут після видалення завдання
+
   useEffect(() => {
     if (todos.length < prevTodosLengthRef.current) {
       inputRef.current?.focus();
@@ -23,16 +21,15 @@ export const TodoForm = ({ addTodo }: { addTodo: (title: string) => void }) => {
   }, [todos.length]);
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-    // зупиняємо перезавантаження
+
     event.preventDefault();
 
     if (newTodo.trim() === '') {
       return;
     }
 
-    // додавання завдання до загального списку!!!!!!!!!
+    // add todo to the global list!!!!!!!!!
     addTodo(newTodo.trim());
-    // очищуємо інпут
     setNewTodo('');
   };
 

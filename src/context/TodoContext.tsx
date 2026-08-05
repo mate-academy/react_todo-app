@@ -24,9 +24,8 @@ export const TodoContext = createContext<TodoContextType | undefined>(
 export const TodoProvider: React.FC<{ children: ReactNode }> = ({
   children,
 }) => {
-  // ініціалізуємо стан із localStorage (або порожнім масивом, якщо нічого немає)
   const [todos, setTodos] = useState<Todo[]>(() => {
-    const savedTodos = localStorage.getItem('todos'); // 🔑 Ключ, який шукають тести
+    const savedTodos = localStorage.getItem('todos');
 
     if (savedTodos) {
       try {
@@ -40,7 +39,7 @@ export const TodoProvider: React.FC<{ children: ReactNode }> = ({
     return [];
   });
 
-  // при збереженні
+  // on saving
   useEffect(() => {
     if (todos.length === 0) {
       localStorage.removeItem('todos');
@@ -115,7 +114,7 @@ export const useTodo = () => {
   const context = useContext(TodoContext);
 
   if (!context) {
-    throw new Error('useTodo має використовуватися всередині TodoProvider');
+    throw new Error('useTodo must be used within a TodoProvider');
   }
 
   return context;

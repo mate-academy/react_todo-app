@@ -1,6 +1,6 @@
 import React from 'react';
 import { useTodo } from '../context/TodoContext';
-import { Filter } from '../types/filter'; // 📌 Імпортуємо винесений тип для фільтрів
+import { Filter } from '../types/filter';
 
 interface FooterProps {
   filter: Filter;

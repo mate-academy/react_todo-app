@@ -5,7 +5,6 @@ import { TodoItem } from './components/TodoItem';
 import { TodoForm } from './components/TodoForm';
 import { Footer } from './components/Footer';
 
-// компонент, який зможе користуватися контекстом
 const TodoApp: React.FC = () => {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const { todos, addTodo, clearCompleted, toggleAll } = useTodo();
@@ -34,7 +33,7 @@ const TodoApp: React.FC = () => {
           {todos.length > 0 && (
             <button
               type="button"
-              /* клас 'active', якщо todos не порожні і кожен todo виконаний */
+              /* 'active', if todos not empty and each todo is completed */
               className={`todoapp__toggle-all ${
                 todos.length > 0 && todos.every(todo => todo.completed)
                   ? 'active'
@@ -60,7 +59,7 @@ const TodoApp: React.FC = () => {
   );
 };
 
-// App огортає все у провайдер
+// App wraps everything in the provider
 export const App: React.FC = () => {
   return (
     <TodoProvider>

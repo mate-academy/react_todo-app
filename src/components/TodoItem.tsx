@@ -15,14 +15,14 @@ export const TodoItem: React.FC<TodoItemProps> = ({ todo }) => {
   const handleSave = () => {
     const trimmedText = editText.trim();
 
-    // якщо текст порожній, видаляємо завдання
+    // if the text is empty, delete the todo
     if (!trimmedText) {
       deleteTodo(todo.id);
 
       return;
     }
 
-    // якщо текст змінився, оновлюємо
+    // if the text has changed, update the todo
     if (trimmedText !== todo.title) {
       updateTodo(todo.id, { title: trimmedText });
     }
