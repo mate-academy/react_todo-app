@@ -2,9 +2,12 @@ import React, { useState } from 'react';
 import { useSetTodos } from '../../hooks/useSetTodos';
 import './TodoHeader.scss';
 import { Todo } from '../../types/Todo';
+import { useTodos } from '../../hooks/useTodos';
+import classNames from 'classnames';
 
 export const TodoHeader = () => {
   const [newTodoTitle, setNewTodoTitle] = useState('');
+  const todos = useTodos();
   const setTodos = useSetTodos();
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
@@ -25,14 +28,29 @@ export const TodoHeader = () => {
     setNewTodoTitle('');
   };
 
+  const handleToggleAll = () => {
+    const newCompleted = !todos.every(todo => todo.completed);
+
+    setTodos(currentTodos =>
+      currentTodos.map(todo => ({ ...todo, completed: newCompleted })),
+    );
+  };
+
+  const areAllTodosCompleted = todos.every(todo => todo.completed);
+
   return (
     <header className="todo-header">
       {/* this button should have `active` class only if all todos are completed */}
-      <button
-        type="button"
-        className="todo-header__toggle-all active"
-        data-cy="ToggleAllButton"
-      />
+      {todos.length > 0 && (
+        <button
+          type="button"
+          className={classNames('todo-header__toggle-all', {
+            active: areAllTodosCompleted,
+          })}
+          onClick={handleToggleAll}
+          data-cy="ToggleAllButton"
+        />
+      )}
 
       {/* Add a todo on form submit */}
       <form onSubmit={handleSubmit}>
