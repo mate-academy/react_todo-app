@@ -1,7 +1,7 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
 import classNames from 'classnames';
 import './Todo.scss';
-import { useTodosSetter } from '../../hooks/useTodosSetter';
+import { useSetTodos } from '../../hooks/useSetTodos';
 
 interface Props {
   id: number;
@@ -10,10 +10,10 @@ interface Props {
 }
 
 export const Todo = ({ id, title, completed }: Props) => {
-  const todosSetter = useTodosSetter();
+  const setTodos = useSetTodos();
 
   const handleToggleCompleted = () => {
-    todosSetter(currentTodos =>
+    setTodos(currentTodos =>
       currentTodos.map(todo =>
         todo.id === id ? { ...todo, completed: !completed } : todo,
       ),
@@ -21,7 +21,7 @@ export const Todo = ({ id, title, completed }: Props) => {
   };
 
   const handleDelete = () => {
-    todosSetter(currentTodos => currentTodos.filter(todo => todo.id !== id));
+    setTodos(currentTodos => currentTodos.filter(todo => todo.id !== id));
   };
 
   return (

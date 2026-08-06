@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
-import { useTodosSetter } from '../../hooks/useTodosSetter';
+import { useSetTodos } from '../../hooks/useSetTodos';
 import './TodoHeader.scss';
 import { Todo } from '../../types/Todo';
 
 export const TodoHeader = () => {
   const [newTodoTitle, setNewTodoTitle] = useState('');
-  const todosSetter = useTodosSetter();
+  const setTodos = useSetTodos();
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -20,7 +20,7 @@ export const TodoHeader = () => {
       completed: false,
     };
 
-    todosSetter(currentTodos => [...currentTodos, newTodo]);
+    setTodos(currentTodos => [...currentTodos, newTodo]);
 
     setNewTodoTitle('');
   };

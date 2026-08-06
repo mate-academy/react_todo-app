@@ -2,7 +2,7 @@ import React, { createContext, useState } from 'react';
 import { Todo } from '../types/Todo';
 import { Filter } from '../types/Filter';
 
-type TodosSetter = {
+type TodosSetters = {
   setTodos: (value: Todo[] | ((prevState: Todo[]) => Todo[])) => void;
   setFilter: (value: Filter) => void;
 } | null;
@@ -12,7 +12,7 @@ type TodosState = {
   filter: Filter;
 } | null;
 
-export const TodosSetterContext = createContext<TodosSetter>(null);
+export const TodosSettersContext = createContext<TodosSetters>(null);
 export const TodosStateContext = createContext<TodosState>(null);
 
 interface Props {
@@ -24,10 +24,10 @@ export const TodosProvider = ({ children }: Props) => {
   const [filter, setFilter] = useState<Filter>('all');
 
   return (
-    <TodosSetterContext.Provider value={{ setTodos, setFilter }}>
+    <TodosSettersContext.Provider value={{ setTodos, setFilter }}>
       <TodosStateContext.Provider value={{ todos, filter }}>
         {children}
       </TodosStateContext.Provider>
-    </TodosSetterContext.Provider>
+    </TodosSettersContext.Provider>
   );
 };

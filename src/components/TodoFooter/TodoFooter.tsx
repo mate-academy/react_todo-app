@@ -1,16 +1,16 @@
 import { useTodos } from '../../hooks/useTodos';
-import { useTodosSetter } from '../../hooks/useTodosSetter';
+import { useSetTodos } from '../../hooks/useSetTodos';
 import { TodoFilter } from '../TodoFilter';
 import './TodoFooter.scss';
 
 export const TodoFooter = () => {
   const todos = useTodos();
-  const todosSetter = useTodosSetter();
+  const setTodos = useSetTodos();
 
   const completedTodosAmount = todos.filter(todo => todo.completed).length;
 
   const handleClearCompleted = () => {
-    todosSetter(currentTodos => currentTodos.filter(todo => !todo.completed));
+    setTodos(currentTodos => currentTodos.filter(todo => !todo.completed));
   };
 
   return (

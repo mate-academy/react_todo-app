@@ -1,5 +1,5 @@
 import classNames from 'classnames';
-import { useSetFilter } from '../../hooks/useFilterSetter';
+import { useSetFilter } from '../../hooks/useSetFilter';
 import { FilterItem } from '../../types/FilterItem';
 import './TodoFilter.scss';
 import { useFilter } from '../../hooks/useFilter';
