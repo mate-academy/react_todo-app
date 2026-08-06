@@ -1,4 +1,4 @@
-import React, { createContext, useState } from 'react';
+import React, { createContext, useEffect, useState } from 'react';
 import { Todo } from '../types/Todo';
 import { Filter } from '../types/Filter';
 
@@ -20,8 +20,26 @@ interface Props {
 }
 
 export const TodosProvider = ({ children }: Props) => {
-  const [todos, setTodos] = useState<Todo[]>([]);
+  const [todos, setTodos] = useState<Todo[]>(() => {
+    const storedTodos = localStorage.getItem('todos');
+
+    if (!storedTodos) {
+      return [];
+    }
+
+    try {
+      return JSON.parse(storedTodos);
+    } catch {
+      localStorage.removeItem('todos');
+
+      return [];
+    }
+  });
   const [filter, setFilter] = useState<Filter>('all');
+
+  useEffect(() => {
+    localStorage.setItem('todos', JSON.stringify(todos));
+  }, [todos]);
 
   return (
     <TodosSettersContext.Provider value={{ setTodos, setFilter }}>
