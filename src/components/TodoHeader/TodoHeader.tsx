@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useSetTodos } from '../../hooks/useSetTodos';
 import './TodoHeader.scss';
 import { Todo } from '../../types/Todo';
@@ -19,7 +19,7 @@ export const TodoHeader = () => {
 
     const newTodo: Todo = {
       id: +new Date(),
-      title: newTodoTitle,
+      title: newTodoTitle.trim(),
       completed: false,
     };
 
@@ -35,6 +35,12 @@ export const TodoHeader = () => {
       currentTodos.map(todo => ({ ...todo, completed: newCompleted })),
     );
   };
+
+  const newTodoFieldRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    newTodoFieldRef.current?.focus();
+  }, [todos.length]);
 
   const areAllTodosCompleted = todos.every(todo => todo.completed);
 
@@ -59,6 +65,7 @@ export const TodoHeader = () => {
           type="text"
           className="todo-header__new-todo"
           placeholder="What needs to be done?"
+          ref={newTodoFieldRef}
           onChange={event => setNewTodoTitle(event.target.value)}
           value={newTodoTitle}
         />
