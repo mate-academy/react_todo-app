@@ -35,7 +35,7 @@ export const TodosProvider = ({ children }: Props) => {
       return [];
     }
   });
-  const [filter, setFilter] = useState<Filter>('all');
+  const [filter, setFilter] = useState<Filter>(Filter.All);
 
   useEffect(() => {
     localStorage.setItem('todos', JSON.stringify(todos));

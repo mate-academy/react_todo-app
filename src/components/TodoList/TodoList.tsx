@@ -9,11 +9,11 @@ import './TodoList.scss';
 const getFilteredTodos = (todos: Todo[], filter: Filter) => {
   return todos.filter(todo => {
     switch (filter) {
-      case 'all':
+      case Filter.All:
         return true;
-      case 'active':
+      case Filter.Active:
         return !todo.completed;
-      case 'completed':
+      case Filter.Completed:
         return todo.completed;
     }
   });

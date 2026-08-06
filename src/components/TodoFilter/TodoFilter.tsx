@@ -3,25 +3,26 @@ import { useSetFilter } from '../../hooks/useSetFilter';
 import { FilterItem } from '../../types/FilterItem';
 import './TodoFilter.scss';
 import { useFilter } from '../../hooks/useFilter';
+import { Filter } from '../../types/Filter';
 
 const filters: FilterItem[] = [
   {
     label: 'All',
-    value: 'all',
+    value: Filter.All,
     href: '#/',
     dataCy: 'FilterLinkAll',
   },
 
   {
     label: 'Active',
-    value: 'active',
+    value: Filter.Active,
     href: '#/active',
     dataCy: 'FilterLinkActive',
   },
 
   {
     label: 'Completed',
-    value: 'completed',
+    value: Filter.Completed,
     href: '#/completed',
     dataCy: 'FilterLinkCompleted',
   },
