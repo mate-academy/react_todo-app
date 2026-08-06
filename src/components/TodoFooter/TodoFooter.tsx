@@ -19,7 +19,6 @@ export const TodoFooter = () => {
         {todos.length - completedTodosAmount} items left
       </span>
 
-      {/* Active link should have the 'selected' class */}
       <TodoFilter />
 
       <button

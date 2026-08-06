@@ -1,12 +1,12 @@
 import { useContext } from 'react';
 import { TodosStateContext } from '../contexts/TodosContext';
 
-export const useTodos = () => {
+export const useFilter = () => {
   const value = useContext(TodosStateContext);
 
   if (!value) {
-    throw new Error('useTodos must be used within a TodosProvider');
+    throw new Error('useFilter must be used within a TodosProvider');
   }
 
-  return value.todos;
+  return value.filter;
 };
