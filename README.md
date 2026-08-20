@@ -1,5 +1,7 @@
 # React ToDo App
 
+[DEMO LINK](https://ikseloi.github.io/react_todo-app/)
+
 Implement a simple [TODO app](https://mate-academy.github.io/react_todo-app/) that functions as described below.
 
 > If you are unsure about how a feature should work, open the real TodoApp and observe its behavior.
@@ -33,4 +35,4 @@ Implement a simple [TODO app](https://mate-academy.github.io/react_todo-app/) th
 - Implement a solution following the [React task guidelines](https://github.com/mate-academy/react_task-guideline#react-tasks-guideline).
 - Use the [React TypeScript cheat sheet](https://mate-academy.github.io/fe-program/js/extra/react-typescript).
 - Open another terminal and run tests with `npm test` to ensure your solution is correct.
-- Replace `<your_account>` with your GitHub username in the [DEMO LINK](https://<your_account>.github.io/react_todo-app/) and add it to the PR description.
+- Replace `<your_account>` with your GitHub username in the [DEMO LINK](https://ikseloi.github.io/react_todo-app/) and add it to the PR description.
