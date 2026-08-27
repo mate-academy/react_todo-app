@@ -58,7 +58,8 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
       data-cy="Todo"
       className={classNames('todo', { completed: todo.completed })}
     >
-      <label className="todo__status-label" htmlFor={`todo-status-${todo.id}`}>
+      {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
+      <label className="todo__status-label">
         <input
           data-cy="TodoStatus"
           type="checkbox"
