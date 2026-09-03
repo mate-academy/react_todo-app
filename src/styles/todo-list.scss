@@ -5,9 +5,10 @@
   grid-template-columns: 45px 1fr;
   justify-items: stretch;
 
+  border-bottom: 1px solid #ededed;
+
   font-size: 24px;
   line-height: 1.4em;
-  border-bottom: 1px solid #ededed;
 
   &:last-child {
     border-bottom: 0;
@@ -30,7 +31,6 @@
 
   &__title {
     padding: 12px 15px;
-
     word-break: break-all;
     transition: color 0.4s;
   }
@@ -41,24 +41,27 @@
   }
 
   &__remove {
-    position: absolute;
-    right: 12px;
-    top: 0;
-    bottom: 0;
-
-    font-size: 120%;
-    line-height: 1;
-    font-family: inherit;
-    font-weight: inherit;
-    color: #cc9a9a;
-
-    float: right;
-    border: 0;
-    background: none;
     cursor: pointer;
 
+    position: absolute;
+    top: 0;
+    right: 12px;
+    bottom: 0;
     transform: translateY(-2px);
+
+    float: right;
+
+    border: 0;
+
+    font-family: inherit;
+    font-size: 120%;
+    font-weight: inherit;
+    line-height: 1;
+    color: #cc9a9a;
+
     opacity: 0;
+    background: none;
+
     transition: color 0.2s ease-out;
 
     &:hover {
@@ -71,21 +74,22 @@
   }
 
   &__title-field {
+    box-sizing: border-box;
     width: 100%;
     padding: 11px 14px;
+    border: 1px solid #999;
 
-    font-size: inherit;
-    line-height: inherit;
     font-family: inherit;
+    font-size: inherit;
     font-weight: inherit;
+    line-height: inherit;
     color: inherit;
 
-    border: 1px solid #999;
     box-shadow: inset 0 -1px 5px 0 rgba(0, 0, 0, 0.2);
 
     &::placeholder {
-      font-style: italic;
       font-weight: 300;
+      font-style: italic;
       color: #e6e6e6;
     }
   }
@@ -93,7 +97,6 @@
   .overlay {
     position: absolute;
     inset: 0;
-
     opacity: 0.5;
   }
 }
