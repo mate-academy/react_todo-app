@@ -7,52 +7,36 @@ import { TodoFooter } from './Components/TodoFooter';
 import './styles/todoapp.scss';
 
 export const App: React.FC = () => {
-  const {
-    todos,
-    filterStatus,
-    addTodos,
-    toggleAllTodos,
-  } = useTodoContext();
+  const { todos, filterStatus, addTodos, toggleAllTodos } = useTodoContext();
 
-    const [newTodoTitle, setNewTodoTitle] = useState('');
+  const [newTodoTitle, setNewTodoTitle] = useState('');
 
-    const field = useRef<HTMLInputElement>(null);
+  const field = useRef<HTMLInputElement>(null);
 
-    useEffect(() => {
+  const focusField = () => {
     field.current?.focus();
-    }, []);
+  };
+
+  useEffect(() => {
+    focusField();
+  }, [todos.length]);
 
   const visibleTodos = useMemo(() => {
     return todos.filter(todo => {
       if (filterStatus === FilterStatus.Active) {
         return !todo.completed;
       }
-      if (filterStatus === FilterStatus.Completed) {
-      return todo.completed;
-    }
 
-    return true;
-  });
-}, [todos, filterStatus]);
+      if (filterStatus === FilterStatus.Completed) {
+        return todo.completed;
+      }
+
+      return true;
+    });
+  }, [todos, filterStatus]);
 
   const isAllCompleted =
-  todos.length > 0 && todos.every(todo => todo.completed);
-
-  useEffect(() => {
-  if (isAllCompleted) {
-    field.current?.focus();
-  }
-}, [isAllCompleted]);
-
-const prevTodosLengthRef = useRef(todos.length);
-
-useEffect(() => {
-  if (todos.length < prevTodosLengthRef.current) {
-    field.current?.focus();
-  }
-
-  prevTodosLengthRef.current = todos.length;
-}, [todos.length]);
+    todos.length > 0 && todos.every(todo => todo.completed);
 
   const handleTaskChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setNewTodoTitle(event.target.value);
@@ -71,17 +55,15 @@ useEffect(() => {
 
       <div className="todoapp__content">
         <header className="todoapp__header">
-          {/* this button should have `active` class only if all todos are completed */}
           {todos.length > 0 && (
             <button
               type="button"
-              className={`todoapp__toggle-all ${isAllCompleted ? 'active' : ''}`}
+              className={`todoapp__toggle-all ${isAllCompleted ? FilterStatus.Active : ''}`}
               data-cy="ToggleAllButton"
               onClick={toggleAllTodos}
             />
           )}
 
-          {/* Add a todo on form submit */}
           <form onSubmit={handleFormSubmit}>
             <input
               ref={field}
@@ -96,19 +78,12 @@ useEffect(() => {
         </header>
 
         <section className="todoapp__main" data-cy="TodoList">
-          {/* This is a completed todo */}
-
           {visibleTodos.map(todo => (
-              <TodoList
-                todo={todo}
-                key={todo.id}
-              />
-            ))}
-
+            <TodoList todo={todo} key={todo.id} />
+          ))}
         </section>
 
         {todos.length > 0 && <TodoFooter />}
-
       </div>
     </div>
   );

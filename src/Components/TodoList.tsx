@@ -5,9 +5,8 @@ import { useTodoContext } from './TodoContext';
 
 type Props = {
   todo: Todo;
-}
+};
 export const TodoList: React.FC<Props> = ({ todo }) => {
-
   const { deleteTodo, handleUpdateTodo } = useTodoContext();
 
   const [isEditing, setIsEditing] = useState(false);
@@ -39,22 +38,19 @@ export const TodoList: React.FC<Props> = ({ todo }) => {
 
     handleUpdateTodo(todo.id, { title: trimmedTitle });
     setIsEditing(false);
+    field.current?.blur();
   };
 
-    const handleKeyUp = (e: React.KeyboardEvent) => {
+  const handleKeyUp = (e: React.KeyboardEvent) => {
     if (e.key === 'Escape') {
       setNewTitle(todo.title);
       setIsEditing(false);
     }
-  }
+  };
 
- return (
+  return (
     <div data-cy="Todo" className={`todo ${todo.completed ? 'completed' : ''}`}>
-      <label
-      className="todo__status-label"
-      htmlFor={`todo-status-${todo.id}`}
-      >
-
+      <label className="todo__status-label" htmlFor={`todo-status-${todo.id}`}>
         <input
           id={`todo-status-${todo.id}`}
           data-cy="TodoStatus"
@@ -63,7 +59,8 @@ export const TodoList: React.FC<Props> = ({ todo }) => {
           checked={todo.completed}
           aria-label={`Статус справи: ${todo.title}`}
           onChange={() =>
-            handleUpdateTodo(todo.id, { completed: !todo.completed })}
+            handleUpdateTodo(todo.id, { completed: !todo.completed })
+          }
         />
       </label>
 
@@ -103,6 +100,3 @@ export const TodoList: React.FC<Props> = ({ todo }) => {
     </div>
   );
 };
-
-
-
