@@ -31,6 +31,28 @@ export const TodoList: React.FC<Props> = ({ inputRef }) => {
     }
   };
 
+  const handleBlur = (id: number, newTitle: string) => {
+    updateTodo(id, newTitle);
+    inputRef?.current?.focus();
+    setEditingTodoId(null);
+  };
+
+  const handleFormSubmit = (id: number, newTitle: string) => {
+    updateTodo(id, newTitle);
+    setEditingTodoId(null);
+    inputRef?.current?.focus();
+  };
+
+  const handleRemoveButton = (id: number) => {
+    deleteTodo(id);
+    inputRef?.current?.focus();
+  };
+
+  const handleTitleDblClick = (id: number, title: string) => {
+    setEditingTodoId(id);
+    setQuery(title);
+  };
+
   return (
     <section className="todoapp__main" data-cy="TodoList">
       {visibleTodos.map(todo => (
@@ -54,10 +76,7 @@ export const TodoList: React.FC<Props> = ({ inputRef }) => {
               <span
                 data-cy="TodoTitle"
                 className="todo__title"
-                onDoubleClick={() => {
-                  setEditingTodoId(todo.id);
-                  setQuery(todo.title);
-                }}
+                onDoubleClick={() => handleTitleDblClick(todo.id, todo.title)}
               >
                 {todo.title}
               </span>
@@ -66,10 +85,7 @@ export const TodoList: React.FC<Props> = ({ inputRef }) => {
                 type="button"
                 className="todo__remove"
                 data-cy="TodoDelete"
-                onClick={() => {
-                  deleteTodo(todo.id);
-                  inputRef?.current?.focus();
-                }}
+                onClick={() => handleRemoveButton(todo.id)}
               >
                 ×
               </button>
@@ -78,9 +94,7 @@ export const TodoList: React.FC<Props> = ({ inputRef }) => {
             <form
               onSubmit={event => {
                 event.preventDefault();
-                updateTodo(todo.id, query.trim());
-                setEditingTodoId(null);
-                inputRef?.current?.focus();
+                handleFormSubmit(todo.id, query.trim());
               }}
             >
               <input
@@ -90,11 +104,7 @@ export const TodoList: React.FC<Props> = ({ inputRef }) => {
                 placeholder="Empty todo will be deleted"
                 value={query}
                 onChange={event => setQuery(event.target.value)}
-                onBlur={() => {
-                  updateTodo(todo.id, query.trim());
-                  inputRef?.current?.focus();
-                  setEditingTodoId(null);
-                }}
+                onBlur={() => handleBlur(todo.id, query.trim())}
                 onKeyUp={handleKeyUp}
                 autoFocus
               />

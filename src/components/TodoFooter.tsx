@@ -9,7 +9,12 @@ export const TodoFooter: React.FC<Props> = ({ inputRef }) => {
   const { todos, clearCompleted, filterStatus, setFilterStatus } = useTodos();
 
   const completedTodos = todos.filter(todo => todo.completed);
-  const activeTodos = todos.filter(todo => !todo.completed).length;
+  const activeTodos = todos.length - completedTodos.length;
+
+  const handleClearCompleted = () => {
+    clearCompleted();
+    inputRef?.current?.focus();
+  };
 
   return (
     <footer className="todoapp__footer" data-cy="Footer">
@@ -17,7 +22,6 @@ export const TodoFooter: React.FC<Props> = ({ inputRef }) => {
         {activeTodos} items left
       </span>
 
-      {/* Active link should have the 'selected' class */}
       <nav className="filter" data-cy="Filter">
         <a
           href="#/"
@@ -57,10 +61,7 @@ export const TodoFooter: React.FC<Props> = ({ inputRef }) => {
         type="button"
         className="todoapp__clear-completed"
         data-cy="ClearCompletedButton"
-        onClick={() => {
-          clearCompleted();
-          inputRef?.current?.focus();
-        }}
+        onClick={handleClearCompleted}
         disabled={completedTodos.length === 0}
       >
         Clear completed
