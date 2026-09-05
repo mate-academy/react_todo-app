@@ -36,7 +36,6 @@ export const TodoHeader: React.FC<Props> = ({ inputRef }) => {
         />
       )}
 
-      {/* Add a todo on form submit */}
       <form onSubmit={handleSubmit}>
         <input
           ref={inputRef}
