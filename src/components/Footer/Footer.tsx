@@ -1,7 +1,7 @@
 import React, { useMemo, useContext, useState } from 'react';
 import cn from 'classnames';
 import { StateContext, DispatchContext } from '../../context/Store';
-
+import { ActionType } from '../../types/ActionType';
 import { Filter } from '../../types/Filter';
 
 export const Footer: React.FC = () => {
@@ -16,10 +16,18 @@ export const Footer: React.FC = () => {
   const handleFilter = (newFilter: Filter) => {
     setFilter(newFilter);
     dispatch({
-      type: 'TODO_FILTER',
+      type: ActionType.TODO_FILTER,
       payload: newFilter,
     });
   };
+
+  const filterList = Object.values(Filter).map(item => {
+    return {
+      url: `#/${item}`,
+      selected: item === filter,
+      filterValue: item
+    }
+  });
 
   return (
     <footer className="todoapp__footer" data-cy="Footer">
@@ -27,33 +35,22 @@ export const Footer: React.FC = () => {
         {completedTodos} items left
       </span>
 
-      <nav className="filter" data-cy="Filter">
-        <a
-          href="#/"
-          className={cn('filter__link', { selected: filter === 'all' })}
-          data-cy="FilterLinkAll"
-          onClick={() => handleFilter(Filter.ALL)}
-        >
-          All
-        </a>
-
-        <a
-          href="#/active"
-          className={cn('filter__link', { selected: filter === 'active' })}
-          data-cy="FilterLinkActive"
-          onClick={() => handleFilter(Filter.ACTIVE)}
-        >
-          Active
-        </a>
-
-        <a
-          href="#/completed"
-          className={cn('filter__link', { selected: filter === 'completed' })}
-          data-cy="FilterLinkCompleted"
-          onClick={() => handleFilter(Filter.COMPLETED)}
-        >
-          Completed
-        </a>
+      <nav className="filter" data-cy="Filter">  
+        { 
+          filterList.map(item => {
+            return (
+              <a
+                key={item.filterValue}
+                href={item.url}
+                className={cn('filter__link', { selected: item.selected })}
+                data-cy="FilterLinkAll"
+                onClick={() => handleFilter(item.filterValue)}
+              >
+                { item.filterValue }
+              </a>
+            )
+          })
+        }
       </nav>
 
       <button
@@ -61,7 +58,7 @@ export const Footer: React.FC = () => {
         className="todoapp__clear-completed"
         data-cy="ClearCompletedButton"
         disabled={!state.todos.some(todo => todo.completed)}
-        onClick={() => dispatch({ type: 'TODO_CLEAR_COMPLETED' })}
+        onClick={() => dispatch({ type: ActionType.TODO_CLEAR_COMPLETED })}
       >
         Clear completed
       </button>

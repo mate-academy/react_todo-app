@@ -4,7 +4,7 @@ import classNames from 'classnames';
 
 interface State {
   data: Todo;
-  onUpdate: (title: string) => void;
+  onUpdate: (title: string, id: number) => void;
   onToggle: () => void;
   onDelete: () => void;
 }
@@ -32,7 +32,7 @@ export const TodoItem: React.FC<State> = ({
     if (title.trim().length === 0) {
       onDelete();
     } else {
-      onUpdate(title.trim());
+      onUpdate(title.trim(), data.id);
     }
   };
 

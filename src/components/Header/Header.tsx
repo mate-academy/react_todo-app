@@ -2,6 +2,7 @@ import React, { useContext, useEffect, useRef } from 'react';
 import classNames from 'classnames';
 
 import { StateContext, DispatchContext } from '../../context/Store';
+import { ActionType } from '../../types/ActionType';
 
 export const Header: React.FC = () => {
   const state = useContext(StateContext);
@@ -23,7 +24,7 @@ export const Header: React.FC = () => {
     }
 
     dispatch({
-      type: 'TODO_ADD',
+      type: ActionType.TODO_ADD,
       payload: {
         title: value.trim(),
         id: +new Date(),
@@ -42,7 +43,7 @@ export const Header: React.FC = () => {
           className={classNames('todoapp__toggle-all', {
             active: state.todos.every(todo => todo.completed),
           })}
-          onClick={() => dispatch({ type: 'TODO_TOGGLE_ALL' })}
+          onClick={() => dispatch({ type: ActionType.TODO_TOGGLE_ALL })}
           data-cy="ToggleAllButton"
         />
       )}

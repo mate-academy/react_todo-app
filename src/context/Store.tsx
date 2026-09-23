@@ -1,15 +1,16 @@
 import { createContext, useReducer } from 'react';
 import { Todo } from '../types/Todo';
 import { Filter } from '../types/Filter';
+import { ActionType } from '../types/ActionType'
 
 type Action =
-  | { type: 'TODO_ADD'; payload: Todo }
-  | { type: 'TODO_TOGGLE'; payload: number }
-  | { type: 'TODO_REMOVE'; payload: number }
-  | { type: 'TODO_EDIT'; payload: { title: string; id: number } }
-  | { type: 'TODO_TOGGLE_ALL' }
-  | { type: 'TODO_FILTER'; payload: Filter }
-  | { type: 'TODO_CLEAR_COMPLETED' };
+  | { type: ActionType.TODO_ADD; payload: Todo }
+  | { type: ActionType.TODO_TOGGLE; payload: number }
+  | { type: ActionType.TODO_REMOVE; payload: number }
+  | { type: ActionType.TODO_EDIT; payload: { title: string; id: number } }
+  | { type: ActionType.TODO_TOGGLE_ALL }
+  | { type: ActionType.TODO_FILTER; payload: Filter }
+  | { type: ActionType.TODO_CLEAR_COMPLETED };
 
 type Props = {
   children: React.ReactNode;
@@ -28,13 +29,13 @@ function reducer(state: State, action: Action): State {
   let newState = state.todos;
 
   switch (action.type) {
-    case 'TODO_ADD':
+    case ActionType.TODO_ADD:
       newState = [...state.todos, action.payload];
       break;
-    case 'TODO_REMOVE':
+    case ActionType.TODO_REMOVE:
       newState = state.todos.filter(todo => todo.id !== action.payload);
       break;
-    case 'TODO_TOGGLE':
+    case ActionType.TODO_TOGGLE:
       newState = state.todos.map(todo => {
         if (todo.id === action.payload) {
           return { ...todo, completed: !todo.completed };
@@ -43,7 +44,7 @@ function reducer(state: State, action: Action): State {
         }
       });
       break;
-    case 'TODO_EDIT':
+    case ActionType.TODO_EDIT:
       newState = state.todos.map(todo => {
         if (todo.id === action.payload.id) {
           return { ...todo, title: action.payload.title };
@@ -52,7 +53,7 @@ function reducer(state: State, action: Action): State {
         }
       });
       break;
-    case 'TODO_TOGGLE_ALL':
+    case ActionType.TODO_TOGGLE_ALL:
       const status = state.todos.every(todo => todo.completed);
 
       newState = state.todos.map(todo => {
@@ -63,10 +64,10 @@ function reducer(state: State, action: Action): State {
         }
       });
       break;
-    case 'TODO_CLEAR_COMPLETED':
+    case ActionType.TODO_CLEAR_COMPLETED:
       newState = state.todos.filter(todo => !todo.completed);
       break;
-    case 'TODO_FILTER':
+    case ActionType.TODO_FILTER:
       return { ...state, filter: action.payload };
     default:
       newState = state.todos;
