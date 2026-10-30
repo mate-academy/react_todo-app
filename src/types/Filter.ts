@@ -1,0 +1,5 @@
+export const enum Filter {
+  'all' = 'all',
+  'active' = 'active',
+  'completed' = 'completed',
+}
