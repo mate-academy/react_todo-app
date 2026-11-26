@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import { useTodos } from '../hooks/UseTodos';
+import { useTodos } from '../hooks/useTodos';
 
 type Props = {
   children: React.ReactNode;
