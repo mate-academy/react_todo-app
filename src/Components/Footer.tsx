@@ -1,5 +1,6 @@
 import { useContext } from 'react';
 import { TabsContext } from '../Context/TabsContext';
+import { FILTERS } from '../Constants';
 
 import cn from 'classnames';
 
@@ -17,9 +18,9 @@ export default function Footer() {
         <a
           href="#/"
           className={cn('filter__link', {
-            selected: filter === 'all',
+            selected: filter === FILTERS.ALL,
           })}
-          onClick={() => setFilter('all')}
+          onClick={() => setFilter(FILTERS.ALL)}
         >
           All
         </a>
@@ -27,9 +28,9 @@ export default function Footer() {
         <a
           href="#/active"
           className={cn('filter__link', {
-            selected: filter === 'active',
+            selected: filter === FILTERS.ACTIVE,
           })}
-          onClick={() => setFilter('active')}
+          onClick={() => setFilter(FILTERS.ACTIVE)}
         >
           Active
         </a>
@@ -37,9 +38,9 @@ export default function Footer() {
         <a
           href="#/completed"
           className={cn('filter__link', {
-            selected: filter === 'completed',
+            selected: filter === FILTERS.COMPLETED,
           })}
-          onClick={() => setFilter('completed')}
+          onClick={() => setFilter(FILTERS.COMPLETED)}
         >
           Completed
         </a>

@@ -1,13 +1,14 @@
 import { createContext } from 'react';
 import { useState, useEffect } from 'react';
 import type { TasksProviderProps, Todo, TodosContextValue } from '../Types';
+import { FILTERS } from '../Constants';
 
 export const TabsContext = createContext<TodosContextValue>(null!);
 
 export const TabsProvider = ({ children }: TasksProviderProps) => {
   // const [todo, setTodo] = useState<Todo | {}>({});
   const [todos, setTodos] = useState<Todo[] | []>([]);
-  const [filter, setFilter] = useState<'all' | 'active' | 'completed'>('all');
+  const [filter, setFilter] = useState<TodoFilter>(FILTERS.ALL);
 
   const isEmpty = todos.length <= 0;
 
@@ -30,12 +31,12 @@ export const TabsProvider = ({ children }: TasksProviderProps) => {
 
   /// footer function
 
-  const visibleTodos: Todo[] = todos.filter(todo => {
-    if (filter === 'active') {
+  const visibleTodos = todos.filter(todo => {
+    if (filter === FILTERS.ACTIVE) {
       return !todo.completed;
     }
 
-    if (filter === 'completed') {
+    if (filter === FILTERS.COMPLETED) {
       return todo.completed;
     }
 

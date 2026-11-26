@@ -1,9 +1,8 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
 import React from 'react';
 
-import { useState } from 'react';
+import { useContext, useEffect, useRef, useState } from 'react';
 import ToggleTodos from './Components/ToggleTodos';
-import { useContext } from 'react';
 import { TabsContext } from './Context/TabsContext';
 import Footer from './Components/Footer';
 import TodoApp from './Components/TodoApp';
@@ -13,11 +12,26 @@ export const App: React.FC = () => {
 
   const { isEmpty, addTodo } = useContext(TabsContext);
 
-  const formHandler = (e: React.FormEvent) => {
+  const formHandler = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    addTodo(title);
+    const trimmedTitle = title.trim();
+
+    if (!trimmedTitle) {
+      return;
+    }
+
+    addTodo(trimmedTitle);
+    setTitle('');
   };
+
+  const newTodoInput = useRef<HTMLInputElement>(null);
+
+    useEffect(() => {
+      if (isEmpty) {
+        newTodoInput.current?.focus();
+      }
+    }, [isEmpty]);
 
   return (
     <div className="todoapp">
@@ -30,13 +44,13 @@ export const App: React.FC = () => {
           {/* Add a todo on form submit */}
           <form onSubmit={formHandler}>
             <input
+              ref={newTodoInput}
               data-cy="NewTodoField"
               type="text"
               className="todoapp__new-todo"
               placeholder="What needs to be done?"
-              minLength={6}
               value={title}
-              onChange={event => setTitle(event.target.value)}
+              onChange={(event) => setTitle(event.target.value)}
             />
           </form>
         </header>

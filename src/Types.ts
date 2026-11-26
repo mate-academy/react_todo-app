@@ -7,7 +7,9 @@ export type Todo = {
   completed: boolean;
 };
 
-export type TodoFilter = 'all' | 'active' | 'completed';
+import type { TodoFilter } from './Constants';
+
+export type { TodoFilter } from './Constants';
 
 export type TasksProviderProps = {
   children: ReactNode;
