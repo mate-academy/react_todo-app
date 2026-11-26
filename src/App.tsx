@@ -27,11 +27,11 @@ export const App: React.FC = () => {
 
   const newTodoInput = useRef<HTMLInputElement>(null);
 
-    useEffect(() => {
-      if (isEmpty) {
-        newTodoInput.current?.focus();
-      }
-    }, [isEmpty]);
+  useEffect(() => {
+    if (isEmpty) {
+      newTodoInput.current?.focus();
+    }
+  }, [isEmpty]);
 
   return (
     <div className="todoapp">
@@ -50,7 +50,7 @@ export const App: React.FC = () => {
               className="todoapp__new-todo"
               placeholder="What needs to be done?"
               value={title}
-              onChange={(event) => setTitle(event.target.value)}
+              onChange={event => setTitle(event.target.value)}
             />
           </form>
         </header>
