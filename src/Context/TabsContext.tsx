@@ -1,8 +1,12 @@
 import { createContext } from 'react';
 import { useState, useEffect } from 'react';
-import type { TasksProviderProps, Todo, TodosContextValue, TodoFilter } from '../Types';
+import type {
+  TasksProviderProps,
+  Todo,
+  TodosContextValue,
+  TodoFilter,
+} from '../Types';
 import { FILTERS } from '../Constants';
-
 
 export const TabsContext = createContext<TodosContextValue>(null!);
 
@@ -12,8 +16,8 @@ export const TabsProvider = ({ children }: TasksProviderProps) => {
     const savedTodos = localStorage.getItem('todos');
 
     return savedTodos ? JSON.parse(savedTodos) : [];
-    });
-  
+  });
+
   const [filter, setFilter] = useState<TodoFilter>(FILTERS.ALL);
 
   const isEmpty = todos.length <= 0;

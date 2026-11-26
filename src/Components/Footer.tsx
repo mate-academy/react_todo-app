@@ -1,7 +1,7 @@
+
 import { useContext } from 'react';
 import { TabsContext } from '../Context/TabsContext';
 import { FILTERS } from '../Constants';
-
 import cn from 'classnames';
 
 export default function Footer() {
@@ -13,13 +13,13 @@ export default function Footer() {
         {`${todos.filter(todo => !todo.completed).length} items left`}
       </span>
 
-      {/* Active link should have the 'selected' class */}
       <nav className="filter" data-cy="Filter">
         <a
           href="#/"
           className={cn('filter__link', {
             selected: filter === FILTERS.ALL,
           })}
+          data-cy="FilterLinkAll"
           onClick={() => setFilter(FILTERS.ALL)}
         >
           All
@@ -30,6 +30,7 @@ export default function Footer() {
           className={cn('filter__link', {
             selected: filter === FILTERS.ACTIVE,
           })}
+          data-cy="FilterLinkActive"
           onClick={() => setFilter(FILTERS.ACTIVE)}
         >
           Active
@@ -40,19 +41,21 @@ export default function Footer() {
           className={cn('filter__link', {
             selected: filter === FILTERS.COMPLETED,
           })}
+          data-cy="FilterLinkCompleted"
           onClick={() => setFilter(FILTERS.COMPLETED)}
         >
           Completed
         </a>
       </nav>
 
-      {/* this button should be disabled if there are no completed todos */}
       <button
         type="button"
         className="todoapp__clear-completed"
         data-cy="ClearCompletedButton"
         onClick={() => {
-          setTodos(prevTodos => prevTodos.filter(todo => !todo.completed));
+          setTodos(prevTodos =>
+            prevTodos.filter(todo => !todo.completed)
+          );
         }}
         disabled={!todos.some(todo => todo.completed)}
       >
