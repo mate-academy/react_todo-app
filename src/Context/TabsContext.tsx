@@ -1,5 +1,5 @@
 import { createContext } from 'react';
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import type {
   TasksProviderProps,
   Todo,
@@ -22,15 +22,15 @@ export const TabsProvider = ({ children }: TasksProviderProps) => {
 
   const isEmpty = todos.length <= 0;
 
-  useEffect(() => {
-    if (todos.length === 0) {
-      localStorage.removeItem('todos');
+  // useEffect(() => {
+  //   if (todos.length === 0) {
+  //     localStorage.removeItem('todos');
 
-      return;
-    }
+  //     return;
+  //   }
 
-    localStorage.setItem('todos', JSON.stringify(todos));
-  }, [todos]);
+  //   localStorage.setItem('todos', JSON.stringify(todos));
+  // }, [todos]);
 
   const addTodo = (title: string) => {
     setTodos(prevTodos => {
