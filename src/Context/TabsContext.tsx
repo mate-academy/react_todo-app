@@ -23,6 +23,11 @@ export const TabsProvider = ({ children }: TasksProviderProps) => {
   const isEmpty = todos.length <= 0;
 
   useEffect(() => {
+    if (todos.length === 0) {
+      localStorage.removeItem('todos');
+      return;
+    }
+
     localStorage.setItem('todos', JSON.stringify(todos));
   }, [todos]);
 

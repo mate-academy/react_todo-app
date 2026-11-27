@@ -52,19 +52,17 @@ export default function Footer({ onClearCompleted }: FooterProps) {
       </nav>
 
       <button
-          type="button"
-          className="todoapp__clear-completed"
-          data-cy="ClearCompletedButton"
-          disabled={!todos.some(todo => todo.completed)}
-          onClick={() => {
-            setTodos(prevTodos =>
-              prevTodos.filter(todo => !todo.completed)
-            );
+        type="button"
+        className="todoapp__clear-completed"
+        data-cy="ClearCompletedButton"
+        disabled={!todos.some(todo => todo.completed)}
+        onClick={() => {
+          setTodos(prevTodos => prevTodos.filter(todo => !todo.completed));
 
-            onClearCompleted();
-          }}
-        >
-          Clear completed
+          onClearCompleted();
+        }}
+      >
+        Clear completed
       </button>
     </footer>
   );

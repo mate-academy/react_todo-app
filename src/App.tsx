@@ -72,9 +72,7 @@ export const App: React.FC = () => {
 
         {/* Hide the footer if there are no todos */}
         {!isEmpty && (
-          <Footer
-            onClearCompleted={() => newTodoInput.current?.focus()}
-          />
+          <Footer onClearCompleted={() => newTodoInput.current?.focus()} />
         )}
       </div>
     </div>
