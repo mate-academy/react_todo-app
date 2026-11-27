@@ -3,7 +3,11 @@ import { TabsContext } from '../Context/TabsContext';
 import { FILTERS } from '../Constants';
 import cn from 'classnames';
 
-export default function Footer() {
+type FooterProps = {
+  onClearCompleted: () => void;
+};
+
+export default function Footer({ onClearCompleted }: FooterProps) {
   const { todos, filter, setFilter, setTodos } = useContext(TabsContext);
 
   return (
@@ -48,15 +52,19 @@ export default function Footer() {
       </nav>
 
       <button
-        type="button"
-        className="todoapp__clear-completed"
-        data-cy="ClearCompletedButton"
-        onClick={() => {
-          setTodos(prevTodos => prevTodos.filter(todo => !todo.completed));
-        }}
-        disabled={!todos.some(todo => todo.completed)}
-      >
-        Clear completed
+          type="button"
+          className="todoapp__clear-completed"
+          data-cy="ClearCompletedButton"
+          disabled={!todos.some(todo => todo.completed)}
+          onClick={() => {
+            setTodos(prevTodos =>
+              prevTodos.filter(todo => !todo.completed)
+            );
+
+            onClearCompleted();
+          }}
+        >
+          Clear completed
       </button>
     </footer>
   );

@@ -14,10 +14,10 @@ export const App: React.FC = () => {
   const newTodoInput = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
-  if (shouldFocusInput) {
-    newTodoInput.current?.focus();
-    setShouldFocusInput(false);
-  }
+    if (shouldFocusInput) {
+      newTodoInput.current?.focus();
+      setShouldFocusInput(false);
+    }
   }, [shouldFocusInput]);
 
   const { isEmpty, addTodo } = useContext(TabsContext);
@@ -39,7 +39,6 @@ export const App: React.FC = () => {
     setShouldFocusInput(true);
   };
 
-
   useEffect(() => {
     if (isEmpty) {
       newTodoInput.current?.focus();
@@ -53,7 +52,6 @@ export const App: React.FC = () => {
       <div className="todoapp__content">
         <header className="todoapp__header">
           {!isEmpty && <ToggleTodos />}
-          
 
           {/* Add a todo on form submit */}
           <form onSubmit={formHandler}>
@@ -73,7 +71,11 @@ export const App: React.FC = () => {
         {!isEmpty && <TodoApp onTodoDeleted={handleTodoDeleted} />}
 
         {/* Hide the footer if there are no todos */}
-        {!isEmpty && <Footer />}
+        {!isEmpty && (
+          <Footer
+            onClearCompleted={() => newTodoInput.current?.focus()}
+          />
+        )}
       </div>
     </div>
   );
