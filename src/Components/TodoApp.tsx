@@ -2,21 +2,29 @@ import { useContext, useRef, useState } from 'react';
 import cn from 'classnames';
 import { TabsContext } from '../Context/TabsContext';
 
-export default function TodoApp() {
+type Props = {
+  onTodoDeleted: () => void;
+};
+
+export default function TodoApp({ onTodoDeleted }: Props) {
   const { visibleTodos, toggleTodo, deleteTodo, updateTodo } =
     useContext(TabsContext);
 
   const [editingTodoId, setEditingTodoId] = useState<number | null>(null);
   const [editTitle, setEditTitle] = useState('');
 
-  // Pomaga odróżnić anulowanie edycji od zwykłego opuszczenia inputa.
+  const handleDelete = (id: number) => {
+    deleteTodo(id);
+    onTodoDeleted();
+  };
+
   const skipNextBlur = useRef(false);
 
   const saveTodo = (id: number) => {
     const trimmedTitle = editTitle.trim();
 
     if (!trimmedTitle) {
-      deleteTodo(id);
+      handleDelete(id);
     } else {
       updateTodo(id, trimmedTitle);
     }
@@ -102,7 +110,7 @@ export default function TodoApp() {
                 type="button"
                 className="todo__remove"
                 data-cy="TodoDelete"
-                onClick={() => deleteTodo(todo.id)}
+                onClick={() => handleDelete(todo.id)}
               >
                 ×
               </button>
