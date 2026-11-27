@@ -44,6 +44,7 @@ export const App: React.FC = () => {
           {/* Add a todo on form submit */}
           <form onSubmit={formHandler}>
             <input
+              autoFocus
               ref={newTodoInput}
               data-cy="NewTodoField"
               type="text"

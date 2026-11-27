@@ -1,4 +1,3 @@
-
 import { useContext } from 'react';
 import { TabsContext } from '../Context/TabsContext';
 import { FILTERS } from '../Constants';
@@ -53,9 +52,7 @@ export default function Footer() {
         className="todoapp__clear-completed"
         data-cy="ClearCompletedButton"
         onClick={() => {
-          setTodos(prevTodos =>
-            prevTodos.filter(todo => !todo.completed)
-          );
+          setTodos(prevTodos => prevTodos.filter(todo => !todo.completed));
         }}
         disabled={!todos.some(todo => todo.completed)}
       >
