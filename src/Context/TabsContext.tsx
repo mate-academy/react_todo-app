@@ -1,17 +1,18 @@
-import { createContext } from 'react';
-import { useState } from 'react';
+
+import { createContext, useState, useEffect } from 'react';
+
 import type {
   TasksProviderProps,
   Todo,
   TodosContextValue,
   TodoFilter,
 } from '../Types';
+
 import { FILTERS } from '../Constants';
 
 export const TabsContext = createContext<TodosContextValue>(null!);
 
 export const TabsProvider = ({ children }: TasksProviderProps) => {
-  // const [todo, setTodo] = useState<Todo | {}>({});
   const [todos, setTodos] = useState<Todo[]>(() => {
     const savedTodos = localStorage.getItem('todos');
 
@@ -20,32 +21,24 @@ export const TabsProvider = ({ children }: TasksProviderProps) => {
 
   const [filter, setFilter] = useState<TodoFilter>(FILTERS.ALL);
 
-  const isEmpty = todos.length <= 0;
+  const isEmpty = todos.length === 0;
 
-  // useEffect(() => {
-  //   if (todos.length === 0) {
-  //     localStorage.removeItem('todos');
 
-  //     return;
-  //   }
-
-  //   localStorage.setItem('todos', JSON.stringify(todos));
-  // }, [todos]);
+  useEffect(() => {
+    localStorage.setItem('todos', JSON.stringify(todos));
+  }, [todos]);
 
   const addTodo = (title: string) => {
-    setTodos(prevTodos => {
-      return [
-        ...prevTodos,
-        {
-          id: Date.now(),
-          title,
-          completed: false,
-        },
-      ];
-    });
+    setTodos(prevTodos => [
+      ...prevTodos,
+      {
+        id: Date.now(),
+        title,
+        completed: false,
+      },
+    ]);
   };
 
-  /// footer function
 
   const visibleTodos = todos.filter(todo => {
     if (filter === FILTERS.ACTIVE) {
@@ -59,13 +52,6 @@ export const TabsProvider = ({ children }: TasksProviderProps) => {
     return true;
   });
 
-  // const activeTodo: Todo[] = useMemo(() => {
-  //   return todos.filter(todo => todo.completed === false);
-  // }, [todos]);
-
-  // const completedTodo: Todo[] = useMemo(() => {
-  //   return todos.filter(todo => todo.completed === true);
-  // }, [todos]);
 
   const toggleTodos = () => {
     setTodos(prevTodos => {
@@ -78,12 +64,13 @@ export const TabsProvider = ({ children }: TasksProviderProps) => {
     });
   };
 
-  // single todo validation
 
   const toggleTodo = (id: number) => {
     setTodos(prevTodos =>
       prevTodos.map(todo =>
-        todo.id === id ? { ...todo, completed: !todo.completed } : todo,
+        todo.id === id
+          ? { ...todo, completed: !todo.completed }
+          : todo,
       ),
     );
   };
@@ -94,7 +81,9 @@ export const TabsProvider = ({ children }: TasksProviderProps) => {
 
   const updateTodo = (id: number, title: string) => {
     setTodos(prevTodos =>
-      prevTodos.map(todo => (todo.id === id ? { ...todo, title } : todo)),
+      prevTodos.map(todo =>
+        todo.id === id ? { ...todo, title } : todo,
+      ),
     );
   };
 
