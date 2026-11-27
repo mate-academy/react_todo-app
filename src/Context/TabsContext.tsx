@@ -25,6 +25,7 @@ export const TabsProvider = ({ children }: TasksProviderProps) => {
   useEffect(() => {
     if (todos.length === 0) {
       localStorage.removeItem('todos');
+
       return;
     }
 
