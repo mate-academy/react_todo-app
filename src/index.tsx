@@ -3,7 +3,12 @@ import { createRoot } from 'react-dom/client';
 import './styles/index.scss';
 
 import { App } from './App';
+import { TabsProvider } from './Context/TabsContext';
 
 const container = document.getElementById('root') as HTMLDivElement;
 
-createRoot(container).render(<App />);
+createRoot(container).render(
+  <TabsProvider>
+    <App />
+  </TabsProvider>,
+);
