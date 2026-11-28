@@ -1,9 +1,4 @@
-import React, {
-  ReactNode,
-  useState,
-  useEffect,
-  createContext,
-} from 'react';
+import React, { ReactNode, useState, useEffect, createContext } from 'react';
 
 type TodosContextType = {
   todos: Todo[];
