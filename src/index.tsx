@@ -4,6 +4,12 @@ import './styles/index.scss';
 
 import { App } from './App';
 
+import { TodosProvider } from './TodosContext';
+
 const container = document.getElementById('root') as HTMLDivElement;
 
-createRoot(container).render(<App />);
+createRoot(container).render(
+  <TodosProvider>
+    <App />
+  </TodosProvider>,
+);
