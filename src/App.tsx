@@ -1,5 +1,5 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useRef } from 'react';
 import { TodosContext } from './TodosContext';
 
 export const App: React.FC = () => {
@@ -11,9 +11,10 @@ export const App: React.FC = () => {
 
   const { todos, setTodos } = context;
   const [newTodo, setNewTodo] = useState('');
-  const [filter, setFilter] = useState('');
+  const [filter, setFilter] = useState('all');
   const [editTodo, setEditTodo] = useState('');
   const [editTodoId, setEditTodoId] = useState<number | null>(null);
+  const newTodoField = useRef<HTMLInputElement>(null);
 
   const visibleTodos = todos.filter(element => {
     if (filter === 'active') {
@@ -32,6 +33,7 @@ export const App: React.FC = () => {
       <div className="todoapp__content">
         <header className="todoapp__header">
           {/* this button should have `active` class only if all todos are completed */}
+          {todos.length > 0 && (
           <button
             type="button"
             className={
@@ -66,6 +68,7 @@ export const App: React.FC = () => {
               }
             }}
           />
+          )}
 
           {/* Add a todo on form submit */}
           <form
@@ -92,6 +95,8 @@ export const App: React.FC = () => {
               className="todoapp__new-todo"
               placeholder="What needs to be done?"
               value={newTodo}
+              autoFocus
+              ref={newTodoField}
               onChange={event => {
                 setNewTodo(event.target.value);
               }}
@@ -109,11 +114,35 @@ export const App: React.FC = () => {
                 }
                 key={todo.id}
               >
+                 <div className="todo__status-label">
+                      <input
+                        data-cy="TodoStatus"
+                        type="checkbox"
+                        checked={todo.completed}
+                        className="todo__status"
+                        onChange={() => {
+                          setTodos(
+                            todos.map(element => {
+                              if (todo.id === element.id) {
+                                return {
+                                  ...element,
+                                  completed: !element.completed,
+                                };
+                              } else {
+                                return element;
+                              }
+                            }),
+                          );
+                        }}
+                      />
+                    </div>
+                    
                 {todo.id === editTodoId ? (
                   <input
-                    data-cy="TodoEdit"
+                    data-cy="TodoTitleField"
                     type="text"
                     className="todo__title-field"
+                    autoFocus
                     value={editTodo}
                     onBlur={() => {
                       if (editTodo.trim() === '') {
@@ -174,28 +203,6 @@ export const App: React.FC = () => {
                   />
                 ) : (
                   <>
-                    <div className="todo__status-label">
-                      <input
-                        data-cy="TodoStatus"
-                        type="checkbox"
-                        checked={todo.completed}
-                        className="todo__status"
-                        onChange={() => {
-                          setTodos(
-                            todos.map(element => {
-                              if (todo.id === element.id) {
-                                return {
-                                  ...element,
-                                  completed: !element.completed,
-                                };
-                              } else {
-                                return element;
-                              }
-                            }),
-                          );
-                        }}
-                      />
-                    </div>
 
                     <span
                       data-cy="TodoTitle"
@@ -216,6 +223,7 @@ export const App: React.FC = () => {
                         setTodos(
                           todos.filter(element => todo.id !== element.id),
                         );
+                        newTodoField.current?.focus();
                       }}
                     >
                       ×
@@ -227,8 +235,11 @@ export const App: React.FC = () => {
           })}
         </section>
 
-        {/* Hide the footer if there are no todos */}
-        <footer className="todoapp__footer" data-cy="Footer">
+        {todos.length > 0 && (
+        <footer
+        className="todoapp__footer"
+        data-cy="Footer"
+        >
           <span className="todo-count" data-cy="TodosCounter">
             {
               todos.filter(element => {
@@ -242,7 +253,7 @@ export const App: React.FC = () => {
           <nav className="filter" data-cy="Filter">
             <a
               href="#/"
-              className="filter__link selected"
+              className={`filter__link ${filter === 'all' ? 'selected' : ''}`}
               data-cy="FilterLinkAll"
               onClick={() => {
                 setFilter('all');
@@ -253,7 +264,7 @@ export const App: React.FC = () => {
 
             <a
               href="#/active"
-              className="filter__link"
+              className={`filter__link ${filter === 'active' ? 'selected' : ''}`}
               data-cy="FilterLinkActive"
               onClick={() => {
                 setFilter('active');
@@ -264,7 +275,7 @@ export const App: React.FC = () => {
 
             <a
               href="#/completed"
-              className="filter__link"
+              className={`filter__link ${filter === 'completed' ? 'selected' : ''}`}
               data-cy="FilterLinkCompleted"
               onClick={() => {
                 setFilter('completed');
@@ -285,6 +296,7 @@ export const App: React.FC = () => {
                   return !element.completed;
                 }),
               );
+                newTodoField.current?.focus();
             }}
             disabled={
               todos.filter(element => {
@@ -295,6 +307,7 @@ export const App: React.FC = () => {
             Clear completed
           </button>
         </footer>
+        )}
       </div>
     </div>
   );
