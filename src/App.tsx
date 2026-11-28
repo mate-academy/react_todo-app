@@ -34,40 +34,41 @@ export const App: React.FC = () => {
         <header className="todoapp__header">
           {/* this button should have `active` class only if all todos are completed */}
           {todos.length > 0 && (
-          <button
-            type="button"
-            className={
-              'todoapp__toggle-all' +
-              (todos.length > 0 && todos.every(todo => todo.completed === true)
-                ? ' active'
-                : '')
-            }
-            data-cy="ToggleAllButton"
-            onClick={() => {
-              if (
-                todos.length > 0 &&
+            <button
+              type="button"
+              className={
+                'todoapp__toggle-all' +
+                (todos.length > 0 &&
                 todos.every(todo => todo.completed === true)
-              ) {
-                setTodos(
-                  todos.map(todo => {
-                    return {
-                      ...todo,
-                      completed: false,
-                    };
-                  }),
-                );
-              } else {
-                setTodos(
-                  todos.map(todo => {
-                    return {
-                      ...todo,
-                      completed: true,
-                    };
-                  }),
-                );
+                  ? ' active'
+                  : '')
               }
-            }}
-          />
+              data-cy="ToggleAllButton"
+              onClick={() => {
+                if (
+                  todos.length > 0 &&
+                  todos.every(todo => todo.completed === true)
+                ) {
+                  setTodos(
+                    todos.map(todo => {
+                      return {
+                        ...todo,
+                        completed: false,
+                      };
+                    }),
+                  );
+                } else {
+                  setTodos(
+                    todos.map(todo => {
+                      return {
+                        ...todo,
+                        completed: true,
+                      };
+                    }),
+                  );
+                }
+              }}
+            />
           )}
 
           {/* Add a todo on form submit */}
@@ -114,29 +115,29 @@ export const App: React.FC = () => {
                 }
                 key={todo.id}
               >
-                 <div className="todo__status-label">
-                      <input
-                        data-cy="TodoStatus"
-                        type="checkbox"
-                        checked={todo.completed}
-                        className="todo__status"
-                        onChange={() => {
-                          setTodos(
-                            todos.map(element => {
-                              if (todo.id === element.id) {
-                                return {
-                                  ...element,
-                                  completed: !element.completed,
-                                };
-                              } else {
-                                return element;
-                              }
-                            }),
-                          );
-                        }}
-                      />
-                    </div>
-                    
+                <div className="todo__status-label">
+                  <input
+                    data-cy="TodoStatus"
+                    type="checkbox"
+                    checked={todo.completed}
+                    className="todo__status"
+                    onChange={() => {
+                      setTodos(
+                        todos.map(element => {
+                          if (todo.id === element.id) {
+                            return {
+                              ...element,
+                              completed: !element.completed,
+                            };
+                          } else {
+                            return element;
+                          }
+                        }),
+                      );
+                    }}
+                  />
+                </div>
+
                 {todo.id === editTodoId ? (
                   <input
                     data-cy="TodoTitleField"
@@ -203,7 +204,6 @@ export const App: React.FC = () => {
                   />
                 ) : (
                   <>
-
                     <span
                       data-cy="TodoTitle"
                       className="todo__title"
@@ -236,77 +236,74 @@ export const App: React.FC = () => {
         </section>
 
         {todos.length > 0 && (
-        <footer
-        className="todoapp__footer"
-        data-cy="Footer"
-        >
-          <span className="todo-count" data-cy="TodosCounter">
-            {
-              todos.filter(element => {
-                return !element.completed;
-              }).length
-            }{' '}
-            items left
-          </span>
-
-          {/* Active link should have the 'selected' class */}
-          <nav className="filter" data-cy="Filter">
-            <a
-              href="#/"
-              className={`filter__link ${filter === 'all' ? 'selected' : ''}`}
-              data-cy="FilterLinkAll"
-              onClick={() => {
-                setFilter('all');
-              }}
-            >
-              All
-            </a>
-
-            <a
-              href="#/active"
-              className={`filter__link ${filter === 'active' ? 'selected' : ''}`}
-              data-cy="FilterLinkActive"
-              onClick={() => {
-                setFilter('active');
-              }}
-            >
-              Active
-            </a>
-
-            <a
-              href="#/completed"
-              className={`filter__link ${filter === 'completed' ? 'selected' : ''}`}
-              data-cy="FilterLinkCompleted"
-              onClick={() => {
-                setFilter('completed');
-              }}
-            >
-              Completed
-            </a>
-          </nav>
-
-          {/* this button should be disabled if there are no completed todos */}
-          <button
-            type="button"
-            className="todoapp__clear-completed"
-            data-cy="ClearCompletedButton"
-            onClick={() => {
-              setTodos(
+          <footer className="todoapp__footer" data-cy="Footer">
+            <span className="todo-count" data-cy="TodosCounter">
+              {
                 todos.filter(element => {
                   return !element.completed;
-                }),
-              );
+                }).length
+              }{' '}
+              items left
+            </span>
+
+            {/* Active link should have the 'selected' class */}
+            <nav className="filter" data-cy="Filter">
+              <a
+                href="#/"
+                className={`filter__link ${filter === 'all' ? 'selected' : ''}`}
+                data-cy="FilterLinkAll"
+                onClick={() => {
+                  setFilter('all');
+                }}
+              >
+                All
+              </a>
+
+              <a
+                href="#/active"
+                className={`filter__link ${filter === 'active' ? 'selected' : ''}`}
+                data-cy="FilterLinkActive"
+                onClick={() => {
+                  setFilter('active');
+                }}
+              >
+                Active
+              </a>
+
+              <a
+                href="#/completed"
+                className={`filter__link ${filter === 'completed' ? 'selected' : ''}`}
+                data-cy="FilterLinkCompleted"
+                onClick={() => {
+                  setFilter('completed');
+                }}
+              >
+                Completed
+              </a>
+            </nav>
+
+            {/* this button should be disabled if there are no completed todos */}
+            <button
+              type="button"
+              className="todoapp__clear-completed"
+              data-cy="ClearCompletedButton"
+              onClick={() => {
+                setTodos(
+                  todos.filter(element => {
+                    return !element.completed;
+                  }),
+                );
                 newTodoField.current?.focus();
-            }}
-            disabled={
-              todos.filter(element => {
-                return element.completed;
-              }).length === 0
-            }
-          >
-            Clear completed
-          </button>
-        </footer>
+              }}
+              disabled={
+                todos.filter(element => {
+                  return element.completed;
+                }).length === 0
+              }
+            >
+              Clear completed
+            </button>
+          </footer>
         )}
       </div>
     </div>
